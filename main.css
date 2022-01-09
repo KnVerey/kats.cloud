@@ -523,6 +523,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: flex;
 }
 
+.h-\[200px\] {
+  height: 200px;
+}
+
 .h-32 {
   height: 8rem;
 }
@@ -537,6 +541,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .min-h-screen {
   min-height: 100vh;
+}
+
+.w-\[200px\] {
+  width: 200px;
 }
 
 .w-32 {
