@@ -1,67 +1,223 @@
 <!doctype html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="main.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/cumulus-cat-cloud-outlined-black.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Katrina Verey — kats.cloud</title>
+  <meta name="description" content="Katrina Verey — Bridging science, technology, and language." />
+  <style>
+    :root{
+      --accent-1: #4b86b4;
+      --accent-2: #e3b04b;
+      --accent-3: #5a7d63;
+      --bg: #000;            /* dark base to avoid white flashes behind images */
+      --text: #1a2233;
+      --muted: #6c7680;
+      --radius: 16px;
+      --max-width: 900px;
+      --shadow: 0 10px 40px rgba(30,40,60,0.12);
+    }
 
-<body class="bg-stone-50">
-  <div class="flex flex-row min-h-screen items-center p-6 sm:p-10">
-    <!-- main box -->
-    <div class="container mx-auto max-w-3xl bg-cc-gold rounded-md px-4 py-8 sm:p-8 text-black">
-      <div class="flex flex-row items-center justify-evenly flex-wrap">
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif;color:var(--text);background:var(--bg)}
 
-        <!-- avatar container -->
-        <div class="items-center p-2">
-          <img class="inline-block h-32 w-32 sm:h-56 sm:w-56 rounded-full ring-2 ring-stone-800" src="https://avatars.githubusercontent.com/u/4789493?v=4" alt="Katrina Verey avatar">
-        </div>
+    /* Fixed background layers that cross-fade */
+    .bg-layer{
+      position:fixed; top:0; left:0; right:0; bottom:0; z-index:0;
+      background-size:cover; background-position:center; background-repeat:no-repeat; background-attachment:fixed;
+      will-change:opacity; opacity:1;
+      transition: opacity 700ms cubic-bezier(.2,.7,.2,1);
+    }
+    .bg-layer.hidden{opacity:0}
 
-        <!-- bio container -->
-        <div class="">
-          <!-- name -->
-          <div class="p-2 flex items-center justify-center md:justify-start flex-wrap sm:flex-nowrap">
-            <h1 class="text-xl sm:text-3xl text-center inline font-semibold">Katrina Verey</h1>
-            <div class="px-2">
-              <img src="images/cumulus-cat.png" alt="Cumulus Cat Logo" class="h-10 w-10 inline">
-            </div>
-          </div>
+    /* Floating shell card */
+    .site{min-height:100dvh;display:grid;place-items:center;padding:6vh 18px; position:relative; z-index:1}
+    .shell{width:100%;max-width:var(--max-width);background:rgba(255,255,255,0.92);backdrop-filter:saturate(115%) blur(8px);-webkit-backdrop-filter:saturate(115%) blur(8px);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(75,134,180,0.10);overflow:hidden}
+    .head{padding:28px 22px 16px 22px;text-align:center}
+    .name{font-size:clamp(30px,6vw,48px);font-weight:800;margin:0 0 6px;font-family:Georgia,serif;color:var(--accent-1)}
+    .tagline{font-size:18px;margin:0 0 12px;font-weight:500;color:#14202e}
+    .sub{font-size:15px;color:var(--muted);margin:0}
 
-          <!-- titles -->
-          <div class="p-2 flex flex-col justify-center text-sm sm:text-base">
-            <div class="flex flex-row">
-              <div class="pr-1 min-w-fit">
-                  <img class="h-[20px] w-[20px]" src="https://cdn.shopify.com/shopifycloud/brochure/assets/brand-assets/shopify-logo-shopping-bag-full-color-66166b2e55d67988b56b4bd28b63c271e2b9713358cb723070a92bde17ad7d63.svg">
-              </div>
-              <div class="">
-                Senior Staff Production&nbsp;Engineer
-              </div>
-            </div>
-            <div class="flex flex-row pt-1 sm:pt-0">
-              <div class="pr-1 min-w-fit">
-                  <img class="h-[20px] w-[20px]" src="https://github.com/cncf/artwork/blob/master/projects/kubernetes/icon/color/kubernetes-icon-color.png?raw=true">
-              </div>
-              <div class="">
-                Tech Lead and Chair, SIG&#8209;CLI
-              </div>
-            </div>
-          </div>
+    .timeline{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px 0 6px}
+    .timeline button{background:transparent;border:2px solid transparent;color:var(--accent-1);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14.5px;transition:background .18s,color .18s,border .18s}
+    .timeline button.active,.timeline button:focus-visible{background:var(--accent-1);color:#fff;border-color:var(--accent-2)}
+    .timeline button:hover:not(.active){background:rgba(75,134,180,0.08);color:var(--accent-3)}
 
-          <!-- badges -->
-          <div class="p-2 flex items-center justify-center md:justify-start">
-            <a href="https://github.com/KnVerey">
-              <img class="rounded-sm inline" src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Github badge">
-            </a>
+    /* Expanding details */
+    .details{max-height:0;opacity:0;overflow:hidden;transition:max-height 560ms cubic-bezier(.2,.7,.2,1), opacity 460ms cubic-bezier(.2,.7,.2,1)}
+    .shell.open .details{opacity:1;max-height:1200px}
+    .details-inner{padding:0 22px 16px 22px; transition: opacity 380ms cubic-bezier(.2,.7,.2,1), transform 380ms cubic-bezier(.2,.7,.2,1)}
+    .section-title{font-family:Georgia,serif;font-size:22px;margin:0 0 8px;color:var(--accent-3)}
+    .copy{color:var(--muted);line-height:1.6;margin:0;font-size:15.5px}
+    .link{display:inline-block;margin-top:12px;color:var(--accent-1);font-weight:600;border-bottom:1.5px solid var(--accent-2);text-decoration:none}
+    .link:hover{color:var(--accent-2)}
 
-            <a href="https://linkedin.com/in/KnVerey">
-              <img class="rounded-sm ml-1 inline" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn badge">
-            </a>
-          </div>
-        </div>
+    /* Integrated footer strip */
+    .meta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;padding:12px 18px;background:rgba(0,0,0,0.55);color:#fff;font-size:13.5px}
+    .meta a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.35);padding-bottom:1px}
+    .meta a:hover{border-bottom-color:#fff}
+
+    @media (max-width:640px){
+      .head{padding:22px 16px 12px}
+      .details-inner{padding:0 16px 12px}
+    }
+  </style>
+</head>
+<body>
+  <!-- cross-fade background layers -->
+  <div id="bgA" class="bg-layer"></div>
+  <div id="bgB" class="bg-layer hidden"></div>
+
+  <main class="site">
+    <section class="shell open" id="shell">
+      <header class="head">
+        <h1 class="name">Katrina Verey</h1>
+        <p class="tagline">Exploring connections between code, cells, and culture.</p>
+        <p class="sub">Biomedical science student in an integrated Honours BSc/PhD program.</p>
+        <nav class="timeline" role="tablist" aria-label="Career themes" id="timeline">
+          <button data-theme="biomed" class="active" aria-selected="true">Biomedical Science</button>
+          <button data-theme="software" aria-selected="false">Software Development</button>
+          <button data-theme="linguistics" aria-selected="false">Linguistic Services</button>
+        </nav>
+      </header>
+
+      <div class="details" id="details">
+        <div class="details-inner" id="detailsInner"></div>
       </div>
-    </div>
-  </div>
-</body>
 
+      <footer class="meta">
+        <span>© <span id="year"></span> Katrina Verey</span>
+        <span>•</span>
+        <a href="https://linkedin.com/in/knverey" target="_blank" rel="noopener">LinkedIn</a>
+        <span>•</span>
+        <a href="https://github.com/KnVerey" target="_blank" rel="noopener">GitHub</a>
+        <span>•</span>
+        <a href="https://instagram.com/microcosmonaut.kat" target="_blank" rel="noopener">Instagram</a>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Theme images
+    const IMAGES = {
+      hero: './images/background.png',
+      biomed: './images/science.png',
+      software: './images/software.jpg',
+      linguistics: './images/language.png'
+    };
+
+    // Content per theme
+    const CONTENT = {
+      biomed:{
+        title:'Biomedical Science',
+        text:`I am pursuing a six-year integrated Honours BSc in Translational and Molecular Medicine and PhD in Cellular and Molecular Medicine. My research interests include tumour evolution and spatial transcriptomics.`,
+        cta:{text:'See selected microscopy work →',href:'https://instagram.com/microcosmonaut.kat'}
+      },
+      software:{
+        title:'Software Development',
+        text:`Before returning to full-time studies, I worked for nearly a decade as a software developer and technical lead focused on large-scale distributed systems, open-source collaboration, and operational reliability.`
+      },
+      linguistics:{
+        title:'Linguistic Services',
+        text:`My career began in translation and editorial roles for public-sector and humanitarian organizations, honing my ability to communicate complex ideas clearly.`
+      }
+    };
+
+    // Elements
+    const shell = document.getElementById('shell');
+    const timeline = document.getElementById('timeline');
+    const details = document.getElementById('details');
+    const detailsInner = document.getElementById('detailsInner');
+    const bgA = document.getElementById('bgA');
+    const bgB = document.getElementById('bgB');
+
+    // Background cross-fade state
+    let bgTop = 'A';
+    function setBg(url, immediate=false){
+      if(!url) return;
+      const top = (bgTop==='A') ? bgA : bgB;
+      const bottom = (bgTop==='A') ? bgB : bgA;
+      bottom.style.backgroundImage = `url(${url})`;
+      if(immediate){
+        top.classList.add('hidden');
+        bottom.classList.remove('hidden');
+        bgTop = (bgTop==='A') ? 'B' : 'A';
+        return;
+      }
+      // start crossfade after a small beat, then flip the active layer
+      setTimeout(()=>{
+        bottom.classList.remove('hidden');
+        top.classList.add('hidden');
+        setTimeout(()=>{ bgTop = (bgTop==='A') ? 'B' : 'A'; }, 720);
+      }, 120);
+    }
+
+    // Build details fragment
+    function buildDetails(key){
+      const data = CONTENT[key];
+      const frag = document.createDocumentFragment();
+      const h = document.createElement('h2'); h.className = 'section-title'; h.textContent = data.title;
+      const p = document.createElement('p'); p.className = 'copy'; p.textContent = data.text;
+      frag.appendChild(h); frag.appendChild(p);
+      if(data.cta){ const a=document.createElement('a'); a.className='link'; a.href=data.cta.href; a.target='_blank'; a.rel='noopener'; a.textContent=data.cta.text; frag.appendChild(a); }
+      return frag;
+    }
+
+    // Animate details swap
+    function renderActive(key){
+      // smooth text fade + slight drop
+      detailsInner.style.opacity = 0;
+      detailsInner.style.transform = 'translateY(6px)';
+      setTimeout(()=>{
+        detailsInner.innerHTML = '';
+        detailsInner.appendChild(buildDetails(key));
+        details.style.maxHeight = detailsInner.scrollHeight + 'px';
+        requestAnimationFrame(()=>{
+          detailsInner.style.opacity = 1;
+          detailsInner.style.transform = 'translateY(0)';
+        });
+      }, 200);
+    }
+
+    // Click/tap handling
+    timeline.addEventListener('click', (ev)=>{
+      const btn = ev.target.closest('button');
+      if(!btn) return;
+      const theme = btn.dataset.theme;
+
+      // set active state
+      [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+
+      // begin background crossfade first
+      const bg = IMAGES[theme];
+      if(bg) setBg(bg);
+
+      // then swap content with a slight stagger
+      setTimeout(()=>{ renderActive(theme); }, 160);
+
+      // keep card in view
+      shell.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+
+    // Init: default to Biomedical open
+    (function init(){
+      const initial = IMAGES.biomed || IMAGES.hero || IMAGES.software || IMAGES.linguistics;
+      if(initial) setBg(initial, true);
+      shell.classList.add('open');
+      renderActive('biomed');
+      setTimeout(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; }, 0);
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // --- lightweight runtime checks (non-fatal) ---
+      try{
+        // background layer toggles on immediate swap
+        const before = bgTop; setBg(IMAGES.software, true); console.assert(bgTop !== before, 'bg layer should toggle on immediate');
+        // details reflow increases for biomed vs software (biomed has CTA)
+        renderActive('software'); const h1 = detailsInner.scrollHeight; renderActive('biomed'); const h2 = detailsInner.scrollHeight; console.assert(h2 >= h1, 'biomed should be same height or taller');
+        // restore bg
+        setBg(initial, true);
+      }catch(e){ /* no-op in production */ }
+    })();
+  </script>
+</body>
 </html>
