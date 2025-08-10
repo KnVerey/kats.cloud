@@ -6,6 +6,7 @@
   <title>Katrina Verey — kats.cloud</title>
   <meta name="description" content="Katrina Verey — Professional profile: biomedical science, software development, and linguistic services." />
   <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png">
+  <meta name="color-scheme" content="light dark">
   <style>
     :root{
       /* default = DARK */
@@ -43,16 +44,17 @@
 
     /* Layout: split with fixed sidebar */
     .wrap{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:28px;padding:28px}
-    .side{position:sticky;top:28px;height:calc(100dvh - 56px);display:flex;flex-direction:column;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;color:var(--text);overflow:auto}
+    .side{position:sticky;top:28px;height:calc(100dvh - 56px);display:flex;flex-direction:column;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;color:var(--text);overflow:auto;scroll-padding-bottom:16px}
     .main{min-height:60dvh}
 
     /* Identity */
     .topbar{display:flex;justify-content:flex-end;margin:-6px 0 4px}
-    .theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:pointer}
+    .theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:pointer;position:relative;transition:background .2s ease, box-shadow .2s ease, transform .06s ease;color:var(--text)}
     .theme-toggle:hover{background:rgba(255,255,255,.06)}
     [data-theme="light"] .theme-toggle:hover{background:#f0f6fb;box-shadow:0 6px 16px rgba(16,30,54,.12)}
     .theme-toggle .icon{display:none}
-
+    [data-theme="light"] .theme-toggle .sun{display:block}
+    [data-theme="dark"] .theme-toggle .moon{display:block}
 /* Dark-mode depth for theme toggle */
 [data-theme="dark"] .theme-toggle{
   background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
@@ -77,8 +79,6 @@
     0 8px 18px rgba(0,0,0,.48),
     0 2px 6px rgba(0,0,0,.34);
 }
-    [data-theme="light"] .theme-toggle .sun{display:block}
-    [data-theme="dark"] .theme-toggle .moon{display:block}
 
     .identity{display:flex;align-items:center;gap:12px}
     .avatar{width:76px;height:76px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.18);box-shadow: inset 0 0 0 2px rgba(255,255,255,.08);background:#66707a}
@@ -135,7 +135,17 @@
       .side{position:static;height:auto}
       .contact{flex-wrap:wrap;white-space:normal}
       .highlights{grid-template-columns:1fr}
+      .tab{padding:14px 14px}
+      .contact a{padding:10px 12px}
+      .theme-toggle{width:40px;height:36px}
     }
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation: none !important; transition: none !important; scroll-behavior: auto !important}
+    }
+    @media (hover: none){
+  .tab:hover, .contact a:hover{ background: inherit; }
+}
   </style>
 </head>
 <body>
@@ -276,37 +286,82 @@ function getRandomGallery(theme){
   return copy.slice(0,6);
 }
 
-(function(){
-  const tabs = document.querySelectorAll('.tab');
-  const panels = document.querySelectorAll('.fade-child');
-  function show(key){
-    panels.forEach(p=>{
-      const isTarget = p.id === 'panel-' + key;
-      p.classList.toggle('active', isTarget);
-      p.hidden = !isTarget;
+  (function(){
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const panels = Array.from(document.querySelectorAll('.fade-child'));
+
+    function show(key){
+      panels.forEach(p=>{
+        const isTarget = p.id === 'panel-' + key;
+        p.classList.toggle('active', isTarget);
+        p.hidden = !isTarget;
+      });
+      tabs.forEach(t=>{
+        const sel = t.dataset.key === key;
+        t.setAttribute('aria-selected', sel ? 'true' : 'false');
+      });
+    }
+
+    function setTabFocus(key){
+      tabs.forEach(t=>{ t.tabIndex = (t.dataset.key === key) ? 0 : -1; });
+      const current = tabs.find(t=> t.dataset.key === key);
+      if(current) current.focus();
+    }
+
+    tabs.forEach((t, i)=>{
+      t.addEventListener('click', ()=>{
+        localStorage.setItem('selectedPanel', t.dataset.key);
+        show(t.dataset.key);
+        setTabFocus(t.dataset.key);
+      });
+      t.addEventListener('keydown', (e)=>{
+        let targetIndex = null;
+        if(e.key === 'ArrowRight' || e.key === 'ArrowDown') targetIndex = (i+1) % tabs.length;
+        else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') targetIndex = (i-1+tabs.length) % tabs.length;
+        else if(e.key === 'Home') targetIndex = 0;
+        else if(e.key === 'End') targetIndex = tabs.length - 1;
+        else if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(t.dataset.key); setTabFocus(t.dataset.key); return; }
+        if(targetIndex !== null){
+          e.preventDefault();
+          const next = tabs[targetIndex];
+          next.focus();
+          show(next.dataset.key);
+          setTabFocus(next.dataset.key);
+        }
+      });
     });
-    tabs.forEach(t=>{
-      const sel = t.dataset.key === key;
-      t.setAttribute('aria-selected', sel ? 'true' : 'false');
-    });
-    localStorage.setItem('selectedPanel', key);
-  }
-  tabs.forEach(t=>{
-    t.addEventListener('click', ()=> show(t.dataset.key));
-  });
-  const saved = localStorage.getItem('selectedPanel');
-  if(saved) show(saved);
-  document.getElementById('year').textContent = new Date().getFullYear();
-  document.getElementById('banner-software').style.backgroundImage = `url(${IMAGES.banners.software})`;
-  document.getElementById('banner-linguistics').style.backgroundImage = `url(${IMAGES.banners.linguistics})`;
-})();
+
+    const saved = localStorage.getItem('selectedPanel') || 'biomed';
+    show(saved);
+    setTabFocus(saved);
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Apply banner images for Software/Linguistics
+    const b2 = document.getElementById('banner-software'); if(b2) b2.style.backgroundImage = `url(${IMAGES.banners.software})`;
+    const b3 = document.getElementById('banner-linguistics'); if(b3) b3.style.backgroundImage = `url(${IMAGES.banners.linguistics})`;
+  })();
 
 function renderGallery(theme){
   const bioGrid = document.getElementById('bioGrid');
   if(!bioGrid) return;
   const imgs = getRandomGallery(theme);
-  bioGrid.innerHTML = imgs.map(g => `<img src="${g.src}" alt="${g.alt}">`).join('');
+  bioGrid.innerHTML = '';
+  imgs.forEach(g => {
+    const el = document.createElement('img');
+    el.src = g.src;
+    el.alt = g.alt || '';
+    // Accessibility & performance
+    el.loading = 'lazy';
+    el.decoding = 'async';
+    // Provide intrinsic dimensions to reduce CLS; grid enforces final size
+    el.width = 320;  // approx column width on desktop
+    el.height = 110; // equals calc(220px/2) row height
+    el.sizes = '(max-width: 920px) 33vw, 16vw';
+    bioGrid.appendChild(el);
+  });
 }
+
 
 // Theme toggle
 (function(){
@@ -323,6 +378,7 @@ function renderGallery(theme){
   const savedTheme = localStorage.getItem('theme') || 'light';
   applyTheme(savedTheme);
 })();
+
 </script>
 </body>
 </html>
