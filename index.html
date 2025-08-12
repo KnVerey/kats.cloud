@@ -6,6 +6,8 @@
   <title>Katrina Verey — kats.cloud</title>
   <meta name="description" content="Katrina Verey — Bridging science, technology, and language." />
   <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png">
+  <link rel="preload" as="image" href="./images/micro1.jpg" media="(prefers-color-scheme: dark)">
+  <link rel="preload" as="image" href="./images/micro1-light.jpg" media="(prefers-color-scheme: light)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet">
@@ -21,6 +23,8 @@
       --radius: 16px;
       --max-width: 900px;
       --shadow: 0 10px 40px rgba(30,40,60,0.12);
+      --tile-min: 140; /* px, used by JS */
+      --grid-gap: 10;  /* px, used by CSS & JS */
       --card-bg: rgba(255,255,255,0.92);
       --card-border: rgba(16,30,54,0.12);
       --meta-bg: rgba(0,0,0,0.55);
@@ -109,15 +113,17 @@
     .meta a{color: var(--meta-text);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.35);padding-bottom:1px}
     .meta a:hover{border-bottom-color:#fff}
 
-    .media-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:10px; margin:14px 0 8px; }
+    .media-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: calc(var(--grid-gap) * 1px); margin:14px 0 8px; }
     .media-grid img { width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow: var(--shadow); aspect-ratio: 1 / 1; }
     .video-wrap{
       position:relative; width:100%;
-      max-width: 50%;                 /* was 720px; now 50% of the card */
+      max-width: min(720px, 50%);
       aspect-ratio: 16 / 9;
       border-radius:14px; overflow:hidden; box-shadow: var(--shadow);
       background:#000; margin:12px auto 0;
+      min-width: 320px;
     }
+    .visually-hidden{ position:absolute!important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
     @media (max-width: 900px){
       .video-wrap{ max-width: 100%; } /* full width on smaller screens */
     }
@@ -140,6 +146,13 @@
       .details-inner{padding:0 16px 12px}
       .timeline button{ padding:10px 14px; font-size:15px }
     }
+
+    @media (prefers-reduced-motion: reduce){
+      .bg-layer{ transition: none; }
+      .shell{ transition: none; }
+      .details{ transition: none; }
+      .details-inner{ transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -148,6 +161,7 @@
   <div id="bgB" class="bg-layer hidden"></div>
 
   <main class="site">
+    <noscript><p style="max-width:900px;margin:1rem auto;text-align:center;color:var(--muted)">This page uses a small amount of JavaScript to display content. Please enable JavaScript to view the details.</p></noscript>
     <section class="shell open" id="shell">
       <header class="head">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
@@ -161,14 +175,14 @@
         <h1 class="name">Katrina Verey</h1>
         <p class="sub">Biomedical science student in an integrated Honours BSc/PhD program.</p>
         <nav class="timeline" role="tablist" aria-label="Career themes" id="timeline">
-          <button data-theme="biomed" class="active" aria-selected="true">Biomedical Science</button>
-          <button data-theme="software" aria-selected="false">Software Development</button>
-          <button data-theme="linguistics" aria-selected="false">Linguistic Services</button>
+          <button id="tab-biomed" data-theme="biomed" class="active" aria-selected="true" aria-controls="detailsInner" tabindex="0">Biomedical Science</button>
+          <button id="tab-software" data-theme="software" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Software Development</button>
+          <button id="tab-linguistics" data-theme="linguistics" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Linguistic Services</button>
         </nav>
       </header>
 
       <div class="details" id="details">
-        <div class="details-inner" id="detailsInner" aria-live="polite"></div>
+        <div class="details-inner" id="detailsInner" role="tabpanel" aria-live="polite" aria-labelledby="tab-biomed"></div>
       </div>
 
       <footer class="meta">
@@ -237,11 +251,18 @@
 
     // Background cross-fade state
     let bgTop = 'A';
+    let fadeId = 0, fadeStartTO = null, flipTO = null;
     function setBg(url, immediate=false){
       if(!url) return;
+      // cancel any in-flight timers
+      if(fadeStartTO){ clearTimeout(fadeStartTO); fadeStartTO = null; }
+      if(flipTO){ clearTimeout(flipTO); flipTO = null; }
+      const myId = ++fadeId;
+
       const top = (bgTop==='A') ? bgA : bgB;
       const bottom = (bgTop==='A') ? bgB : bgA;
       bottom.style.backgroundImage = `url(${url})`;
+
       if(immediate){
         top.classList.add('hidden');
         bottom.classList.remove('hidden');
@@ -249,17 +270,26 @@
         return;
       }
       // start crossfade after a small beat, then flip the active layer
-      setTimeout(()=>{
+      fadeStartTO = setTimeout(()=>{
+        if(myId !== fadeId) return; // a newer fade started
         bottom.classList.remove('hidden');
         top.classList.add('hidden');
-        setTimeout(()=>{ bgTop = (bgTop==='A') ? 'B' : 'A'; }, 720);
+        flipTO = setTimeout(()=>{ if(myId === fadeId) bgTop = (bgTop==='A') ? 'B' : 'A'; }, 720);
       }, 120);
+    }
+
+    // Safe localStorage helpers
+    function lsGet(key){
+      try { return window.localStorage.getItem(key); } catch(_) { return null; }
+    }
+    function lsSet(key, val){
+      try { window.localStorage.setItem(key, val); } catch(_) { /* noop */ }
     }
 
     function applyTheme(t){
       document.documentElement.setAttribute('data-theme', t);
       themeBtn && themeBtn.setAttribute('aria-pressed', t==='light' ? 'true' : 'false');
-      localStorage.setItem(THEME_KEY, t);
+      lsSet(THEME_KEY, t);
       // if current active tab is biomed, refresh background to correct variant
       const activeBtn = timeline.querySelector('button.active');
       const key = activeBtn ? activeBtn.dataset.theme : 'biomed';
@@ -279,6 +309,9 @@
     });
 
     // Build details fragment
+    // Track gallery ResizeObserver for cleanup
+    let galleryRO = null;
+
     function buildDetails(key){
       const data = CONTENT[key];
       const frag = document.createDocumentFragment();
@@ -290,20 +323,31 @@
         const grid = document.createElement('div'); grid.className = 'media-grid'; grid.setAttribute('aria-label','Microscopy gallery');
         const pool = (currentTheme()==='light' ? GALLERY_LIGHT : GALLERY_DARK).slice();
         for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
-        const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        let cols, total;
-        if(w >= 980){ cols = 4; total = 8; }
-        else if(w >= 700){ cols = 3; total = 6; }
-        else if(w >= 480){ cols = 2; total = 4; }
-        else { cols = 2; total = 2; }
-        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        const picks = pool.slice(0, total);
-        picks.forEach(item=>{
+        const maxPool = pool.slice(0, 8); // up to 8, we will show fewer based on width
+        maxPool.forEach(item=>{
           const img = document.createElement('img');
           img.loading = 'lazy'; img.decoding = 'async';
-          img.src = item.src; img.alt = item.alt;
+          img.src = item.src; img.alt = item.alt; // you can set alt="" later if decorative
           grid.appendChild(img);
         });
+
+        // Clean up previous gallery observer
+        if (galleryRO) { try { galleryRO.disconnect(); } catch(_){} }
+        // Container-aware columns & counts (even, full rows)
+        galleryRO = new ResizeObserver(entries=>{
+          const w = entries[0].contentRect.width;
+          const MIN = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tile-min')) || 140;
+          const GAP = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--grid-gap')) || 10;
+          let cols = 2;
+          if (w >= 4*MIN + 3*GAP) cols = 4;
+          else if (w >= 3*MIN + 2*GAP) cols = 3;
+          else cols = 2;
+          const total = cols * 2;
+          grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+          Array.from(grid.children).forEach((el, i)=> el.style.display = (i < total) ? '' : 'none');
+          requestAnimationFrame(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; });
+        });
+        galleryRO.observe(grid);
         frag.appendChild(grid);
       }
 
@@ -315,12 +359,16 @@
         thumb.setAttribute('role','button');
         thumb.setAttribute('aria-label','Play talks playlist');
         thumb.tabIndex = 0;
+        thumb.setAttribute('aria-pressed','false');
 
         const iframe = document.createElement('iframe');
         iframe.title = 'Talks by Katrina Verey';
         iframe.loading = 'lazy';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
+        iframe.id = 'software-video-iframe';
+        thumb.setAttribute('aria-controls', iframe.id);
+        thumb.setAttribute('aria-describedby', 'soft-desc');
         const PLAYLIST_ID = 'PLbQ4eioQT6QPBat3jZPcdUfHmE18bVGFg';
         const YT_SRC = 'https://www.youtube-nocookie.com/embed/videoseries?list=' + PLAYLIST_ID
           + '&listType=playlist&rel=0&modestbranding=1&autohide=1&playsinline=1&controls=1'
@@ -329,10 +377,18 @@
         function activate(){
           if(!iframe.src) iframe.src = YT_SRC;
           thumb.classList.add('hidden');
+          thumb.setAttribute('aria-pressed','true');
+          thumb.setAttribute('aria-hidden','true');
+          setTimeout(()=>{ iframe.focus && iframe.focus(); }, 50);
         }
         thumb.addEventListener('click', activate);
         thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
 
+        const sr = document.createElement('span');
+        sr.id = 'soft-desc';
+        sr.className = 'visually-hidden';
+        sr.textContent = 'Press to load and play a YouTube playlist of talks';
+        wrap.appendChild(sr);
         wrap.appendChild(thumb);
         wrap.appendChild(iframe);
         frag.appendChild(wrap);
@@ -343,8 +399,15 @@
     }
 
     // Animate details swap
-    function renderActive(key){
-      // smooth text fade + slight drop
+    function renderActive(key, instant=false){
+      if(instant){
+        detailsInner.innerHTML = '';
+        detailsInner.appendChild(buildDetails(key));
+        details.style.maxHeight = detailsInner.scrollHeight + 'px';
+        detailsInner.style.opacity = 1;
+        detailsInner.style.transform = 'translateY(0)';
+        return;
+      }
       detailsInner.style.opacity = 0;
       detailsInner.style.transform = 'translateY(6px)';
       setTimeout(()=>{
@@ -364,10 +427,17 @@
       if(!btn) return;
       const theme = btn.dataset.theme;
 
-      // set active state
-      [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-      localStorage.setItem(TAB_KEY, theme);
+      // set active state, roving tabindex, ARIA tabpanel label
+      [...timeline.querySelectorAll('button')].forEach(b=>{
+        b.classList.remove('active');
+        b.setAttribute('aria-selected','false');
+        b.setAttribute('tabindex','-1');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      btn.setAttribute('tabindex','0');
+      document.getElementById('detailsInner').setAttribute('aria-labelledby', btn.id);
+      lsSet(TAB_KEY, theme);
 
       // begin background crossfade first
       const bg = getBgFor(theme);
@@ -383,7 +453,11 @@
     timeline.addEventListener('keydown', (e)=>{
       const buttons = Array.from(timeline.querySelectorAll('button'));
       const idx = buttons.findIndex(b=> b.classList.contains('active'));
-      const focusTo = (i)=>{ buttons[i].focus(); buttons[i].click(); };
+      const focusTo = (i)=>{
+        buttons.forEach((b, j)=> b.setAttribute('tabindex', j===i ? '0' : '-1'));
+        buttons[i].focus();
+        buttons[i].click();
+      };
       if(['ArrowRight','ArrowDown'].includes(e.key)){ e.preventDefault(); focusTo((idx+1)%buttons.length); }
       if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); focusTo((idx-1+buttons.length)%buttons.length); }
       if(e.key==='Home'){ e.preventDefault(); focusTo(0); }
@@ -392,17 +466,21 @@
 
     // Init: restore theme and last tab
     (function init(){
-      const savedTheme = localStorage.getItem(THEME_KEY);
+      const savedTheme = lsGet(THEME_KEY);
       const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
       const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
       document.documentElement.setAttribute('data-theme', initialTheme);
       themeBtn && themeBtn.setAttribute('aria-pressed', initialTheme==='light' ? 'true' : 'false');
 
       // Restore active tab
-      const savedTab = localStorage.getItem(TAB_KEY) || 'biomed';
+      const savedTab = lsGet(TAB_KEY) || 'biomed';
       const btn = timeline.querySelector(`button[data-theme="${savedTab}"]`) || timeline.querySelector('button[data-theme="biomed"]');
       [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
       btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      // roving tabindex
+      [...timeline.querySelectorAll('button')].forEach(b=> b.setAttribute('tabindex', b===btn ? '0' : '-1'));
+      // ensure tabpanel is labelled by the active tab
+      document.getElementById('detailsInner').setAttribute('aria-labelledby', btn.id);
 
       // Set background per current theme and tab
       const initialBg = getBgFor(btn.dataset.theme);
@@ -410,9 +488,7 @@
 
       shell.classList.add('open');
       // Build details for the active tab
-      detailsInner.innerHTML = '';
-      detailsInner.appendChild(buildDetails(btn.dataset.theme));
-      setTimeout(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; }, 0);
+      renderActive(btn.dataset.theme, true);
 
       document.getElementById('year').textContent = new Date().getFullYear();
     })();
@@ -422,64 +498,48 @@
       const card = document.getElementById('shell');
       if(!card) return;
 
+      let holding = false;
+      let pressTimer = null;
+      let active = false;
+
       function isOnBackground(e){
         const r = card.getBoundingClientRect();
-        const x = e.clientX, y = e.clientY;
-        // True if the pointer is outside the card bounds
+        const {clientX:x, clientY:y} = e;
         return (x < r.left || x > r.right || y < r.top || y > r.bottom);
       }
 
-      let holding = false;
-      let pressTimer;
       function onPointerMove(e){
-        if(!holding) return;
-        if(isOnBackground(e)) card.classList.add('peek-bg');
-        else card.classList.remove('peek-bg');
+        if(!active) return;
+        card.classList.toggle('peek-bg', isOnBackground(e));
       }
       function endHold(){
-        clearTimeout(pressTimer);
-        holding = false;
+        if(pressTimer){ clearTimeout(pressTimer); pressTimer = null; }
+        active = false; holding = false;
         card.classList.remove('peek-bg');
         window.removeEventListener('pointermove', onPointerMove);
         window.removeEventListener('pointerup', endHold);
         window.removeEventListener('pointercancel', endHold);
         window.removeEventListener('blur', endHold);
       }
-
       function onPointerDown(e){
-        // Primary mouse or touch only
         const primaryMouse = (e.pointerType === 'mouse' && e.button === 0);
         const touch = (e.pointerType === 'touch');
         if(!(primaryMouse || touch)) return;
-        if(!isOnBackground(e)) return; // must start on background
+        if(!isOnBackground(e)) return;
+        if(pressTimer || active) return; // guard against re-entry
 
+        holding = true;
         pressTimer = setTimeout(()=>{
-          holding = true;
-          if(isOnBackground(e)) card.classList.add('peek-bg');
+          active = true;
+          card.classList.add('peek-bg');
           window.addEventListener('pointermove', onPointerMove, {passive:true});
-        }, 250); // 250ms hold before triggering
-
+        }, 300);
         window.addEventListener('pointerup', endHold, {once:true});
         window.addEventListener('pointercancel', endHold, {once:true});
         window.addEventListener('blur', endHold, {once:true});
       }
-
-      // Listen on the document so background clicks anywhere outside the card are captured
-      document.addEventListener('pointerdown', onPointerDown);
+      document.addEventListener('pointerdown', onPointerDown, {passive:true});
     })();
-    // Gallery resize handler (keep rows full when width changes)
-    let galleryResizeTO;
-    window.addEventListener('resize', ()=>{
-      clearTimeout(galleryResizeTO);
-      galleryResizeTO = setTimeout(()=>{
-        const activeBtn = timeline.querySelector('button.active');
-        if(activeBtn && activeBtn.dataset.theme === 'biomed'){
-          detailsInner.innerHTML = '';
-          detailsInner.appendChild(buildDetails('biomed'));
-          details.style.maxHeight = detailsInner.scrollHeight + 'px';
-        }
-      }, 150);
-    });
   </script>
 </body>
 </html>

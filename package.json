@@ -1,5 +1,15 @@
 {
+  "name": "kats-cloud",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:update": "playwright test --update-snapshots"
+  },
   "devDependencies": {
-    "tailwindcss": "^3.0.12"
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.2.1",
+    "http-server": "^14.1.1"
   }
 }
