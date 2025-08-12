@@ -6,17 +6,44 @@
   <title>Katrina Verey — kats.cloud</title>
   <meta name="description" content="Katrina Verey — Bridging science, technology, and language." />
   <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet">
   <style>
     :root{
+      /* theme palettes */
       --accent-1: #4b86b4;
       --accent-2: #e3b04b;
-      --accent-3: #5a7d63;
+      --accent-3: #4b7ea8;
       --bg: #000;            /* dark base to avoid white flashes behind images */
       --text: #1a2233;
       --muted: #6c7680;
       --radius: 16px;
       --max-width: 900px;
       --shadow: 0 10px 40px rgba(30,40,60,0.12);
+      --card-bg: rgba(255,255,255,0.92);
+      --card-border: rgba(16,30,54,0.12);
+      --meta-bg: rgba(0,0,0,0.55);
+      --meta-text: #ffffff;
+    }
+
+    html[data-theme="light"] {
+      --bg: #d9dfe6;        /* v2 light */
+      --text: #152033;
+      --muted: #516070;
+      --card-bg: rgba(255,255,255,0.9);
+      --card-border: rgba(16,30,54,0.12);
+      --meta-bg: rgba(0,0,0,0.55);
+      --meta-text: #ffffff;
+    }
+    html[data-theme="dark"] {
+      --bg: #0b0f14;        /* v2 dark */
+      --text: #e9eef4;
+      --muted: #a9b4c0;
+      --card-bg: rgba(20,26,34,0.9); /* dark card */
+      --card-border: rgba(255,255,255,0.08);
+      --meta-bg: rgba(255,255,255,0.08);
+      --meta-text: #e9eef4;
     }
 
     html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif;color:var(--text);background:var(--bg)}
@@ -32,10 +59,20 @@
 
     /* Floating shell card */
     .site{min-height:100dvh;display:grid;place-items:center;padding:6vh 18px; position:relative; z-index:1}
-    .shell{width:100%;max-width:var(--max-width);background:rgba(255,255,255,0.92);backdrop-filter:saturate(115%) blur(8px);-webkit-backdrop-filter:saturate(115%) blur(8px);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(75,134,180,0.10);overflow:hidden}
-    .head{padding:28px 22px 16px 22px;text-align:center}
-    .name{font-size:clamp(30px,6vw,48px);font-weight:800;margin:0 0 6px;font-family:Georgia,serif;color:var(--accent-1)}
-    .tagline{font-size:18px;margin:0 0 12px;font-weight:500;color:#14202e}
+    .shell{width:100%;max-width:var(--max-width);background:var(--card-bg);backdrop-filter:saturate(115%) blur(8px);-webkit-backdrop-filter:saturate(115%) blur(8px);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--card-border);overflow:hidden}
+    .shell{ transition: opacity .18s ease, transform .18s ease; }
+    .shell.peek-bg{ opacity:0; transform:scale(0.98); pointer-events:none; }
+    .head{padding:28px 22px 16px 22px;text-align:center; position: relative;}
+    .name{
+      font-family: "Ephesis", cursive;
+      font-size: clamp(36px, 7.2vw, 64px);
+      font-weight: 400; /* Ephesis has a single weight */
+      letter-spacing: 0.2px;
+      line-height: 1.05;
+      margin: 0 0 6px;
+      color: var(--accent-1);
+    }
+    .tagline{font-size:18px;margin:0 0 12px;font-weight:500;color: var(--muted)}
     .sub{font-size:15px;color:var(--muted);margin:0}
 
     .timeline{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px 0 6px}
@@ -43,23 +80,65 @@
     .timeline button.active,.timeline button:focus-visible{background:var(--accent-1);color:#fff;border-color:var(--accent-2)}
     .timeline button:hover:not(.active){background:rgba(75,134,180,0.08);color:var(--accent-3)}
 
+    .theme-toggle{position:absolute; right:14px; top:14px; display:inline-flex; align-items:center; justify-content:center; width:38px; height:34px; border-radius:8px; border:1px solid rgba(0,0,0,.12); cursor:pointer; color:var(--text); box-shadow:0 6px 16px rgba(0,0,0,.18); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));}
+    html[data-theme="light"] .theme-toggle{background:#fff; box-shadow:0 6px 16px rgba(16,30,54,.12)}
+    .theme-toggle .icon{display:none}
+    html[data-theme="light"] .theme-toggle .sun{display:block}
+    html[data-theme="dark"] .theme-toggle .moon{display:block}
+    .theme-toggle:hover{transform:translateY(-1px)}
+
     /* Expanding details */
     .details{max-height:0;opacity:0;overflow:hidden;transition:max-height 560ms cubic-bezier(.2,.7,.2,1), opacity 460ms cubic-bezier(.2,.7,.2,1)}
     .shell.open .details{opacity:1;max-height:1200px}
     .details-inner{padding:0 22px 16px 22px; transition: opacity 380ms cubic-bezier(.2,.7,.2,1), transform 380ms cubic-bezier(.2,.7,.2,1)}
     .section-title{font-family:Georgia,serif;font-size:22px;margin:0 0 8px;color:var(--accent-3)}
     .copy{color:var(--muted);line-height:1.6;margin:0;font-size:15.5px}
-    .link{display:inline-block;margin-top:12px;color:var(--accent-1);font-weight:600;border-bottom:1.5px solid var(--accent-2);text-decoration:none}
-    .link:hover{color:var(--accent-2)}
+    .link{
+      display:inline-block;
+      margin-top:12px;
+      color:var(--text);
+      font-weight:600;
+      border-bottom:1px solid var(--muted);
+      text-decoration:none;
+    }
+    .link:hover{ color:var(--accent-1); border-bottom-color: var(--accent-1); }
+    .link .emoji{ margin-right:8px; }
 
     /* Integrated footer strip */
-    .meta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;padding:12px 18px;background:rgba(0,0,0,0.55);color:#fff;font-size:13.5px}
-    .meta a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.35);padding-bottom:1px}
+    .meta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;padding:12px 18px;background: var(--meta-bg); color: var(--meta-text);font-size:13.5px}
+    .meta a{color: var(--meta-text);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.35);padding-bottom:1px}
     .meta a:hover{border-bottom-color:#fff}
+
+    .media-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:10px; margin:14px 0 8px; }
+    .media-grid img { width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow: var(--shadow); aspect-ratio: 1 / 1; }
+    .video-wrap{
+      position:relative; width:100%;
+      max-width: 50%;                 /* was 720px; now 50% of the card */
+      aspect-ratio: 16 / 9;
+      border-radius:14px; overflow:hidden; box-shadow: var(--shadow);
+      background:#000; margin:12px auto 0;
+    }
+    @media (max-width: 900px){
+      .video-wrap{ max-width: 100%; } /* full width on smaller screens */
+    }
+    .video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; z-index:1; }
+    .video-thumb{ position:absolute; inset:0; background-size:cover; background-position:center; cursor:pointer; z-index:2; }
+    .video-thumb.hidden{ display:none }
+    .video-thumb::before{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:64px; height:64px; border-radius:50%; background: rgba(0,0,0,.35);
+      box-shadow:0 6px 16px rgba(0,0,0,.25);
+    }
+    .video-thumb::after{
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-38%,-50%);
+      width:0; height:0; border-left:26px solid #fff; border-top:16px solid transparent; border-bottom:16px solid transparent;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+    }
 
     @media (max-width:640px){
       .head{padding:22px 16px 12px}
       .details-inner{padding:0 16px 12px}
+      .timeline button{ padding:10px 14px; font-size:15px }
     }
   </style>
 </head>
@@ -71,8 +150,15 @@
   <main class="site">
     <section class="shell open" id="shell">
       <header class="head">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
+          <span class="icon sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.41-1.41-1.8 1.79zM17.66 6.34l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 18a6 6 0 100-12 6 6 0 000 12zm0 4h-0.01H12z"/></svg>
+          </span>
+          <span class="icon moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+          </span>
+        </button>
         <h1 class="name">Katrina Verey</h1>
-        <p class="tagline">Exploring connections between code, cells, and culture.</p>
         <p class="sub">Biomedical science student in an integrated Honours BSc/PhD program.</p>
         <nav class="timeline" role="tablist" aria-label="Career themes" id="timeline">
           <button data-theme="biomed" class="active" aria-selected="true">Biomedical Science</button>
@@ -82,7 +168,7 @@
       </header>
 
       <div class="details" id="details">
-        <div class="details-inner" id="detailsInner"></div>
+        <div class="details-inner" id="detailsInner" aria-live="polite"></div>
       </div>
 
       <footer class="meta">
@@ -101,17 +187,32 @@
     // Theme images
     const IMAGES = {
       hero: './images/background.png',
-      biomed: './images/micro1.jpg',
+      biomedDark: './images/micro1.jpg',
+      biomedLight: './images/micro1-light.jpg',
       software: './images/software.png',
       linguistics: './images/language.png'
     };
+
+    // Microscopy pools (exclude image 1) for light/dark
+    const GALLERY_DARK = Array.from({length:12}, (_,i)=> i+1).filter(n=>n!==1).map(n=>({src:`./images/micro${n}.jpg`, alt:`Microscopy image ${n}`}));
+    const GALLERY_LIGHT = Array.from({length:12}, (_,i)=> i+1).filter(n=>n!==1).map(n=>({src:`./images/micro${n}-light.jpg`, alt:`Microscopy image ${n} light`}));
+
+    function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+    function getBgFor(sectionKey){
+      if(sectionKey==='biomed'){
+        return currentTheme()==='light' ? IMAGES.biomedLight : IMAGES.biomedDark;
+      }
+      if(sectionKey==='software') return IMAGES.software;
+      if(sectionKey==='linguistics') return IMAGES.linguistics;
+      return IMAGES.hero;
+    }
 
     // Content per theme
     const CONTENT = {
       biomed:{
         title:'Biomedical Science',
         text:`I am pursuing a six-year integrated Honours BSc in Translational and Molecular Medicine and PhD in Cellular and Molecular Medicine. My research interests include tumour evolution and spatial transcriptomics.`,
-        cta:{text:'See selected microscopy work →',href:'https://instagram.com/microcosmonaut.kat'}
+        cta:{text:'See more of my microscopy →',href:'https://instagram.com/microcosmonaut.kat'}
       },
       software:{
         title:'Software Development',
@@ -130,6 +231,9 @@
     const detailsInner = document.getElementById('detailsInner');
     const bgA = document.getElementById('bgA');
     const bgB = document.getElementById('bgB');
+    const themeBtn = document.getElementById('themeToggle');
+    const THEME_KEY = 'kats.theme';
+    const TAB_KEY = 'kats.activeTab';
 
     // Background cross-fade state
     let bgTop = 'A';
@@ -152,6 +256,28 @@
       }, 120);
     }
 
+    function applyTheme(t){
+      document.documentElement.setAttribute('data-theme', t);
+      themeBtn && themeBtn.setAttribute('aria-pressed', t==='light' ? 'true' : 'false');
+      localStorage.setItem(THEME_KEY, t);
+      // if current active tab is biomed, refresh background to correct variant
+      const activeBtn = timeline.querySelector('button.active');
+      const key = activeBtn ? activeBtn.dataset.theme : 'biomed';
+      const bg = getBgFor(key);
+      if(bg) setBg(bg, true);
+      // if biomed is displayed, rebuild details to refresh gallery to current theme set
+      if(key==='biomed'){
+        detailsInner.innerHTML = '';
+        detailsInner.appendChild(buildDetails('biomed'));
+        details.style.maxHeight = detailsInner.scrollHeight + 'px';
+      }
+    }
+
+    themeBtn && themeBtn.addEventListener('click', ()=>{
+      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      applyTheme(cur==='dark' ? 'light' : 'dark');
+    });
+
     // Build details fragment
     function buildDetails(key){
       const data = CONTENT[key];
@@ -159,7 +285,60 @@
       const h = document.createElement('h2'); h.className = 'section-title'; h.textContent = data.title;
       const p = document.createElement('p'); p.className = 'copy'; p.textContent = data.text;
       frag.appendChild(h); frag.appendChild(p);
-      if(data.cta){ const a=document.createElement('a'); a.className='link'; a.href=data.cta.href; a.target='_blank'; a.rel='noopener'; a.textContent=data.cta.text; frag.appendChild(a); }
+
+      if(key==='biomed'){
+        const grid = document.createElement('div'); grid.className = 'media-grid'; grid.setAttribute('aria-label','Microscopy gallery');
+        const pool = (currentTheme()==='light' ? GALLERY_LIGHT : GALLERY_DARK).slice();
+        for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+        const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        let cols, total;
+        if(w >= 980){ cols = 4; total = 8; }
+        else if(w >= 700){ cols = 3; total = 6; }
+        else if(w >= 480){ cols = 2; total = 4; }
+        else { cols = 2; total = 2; }
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        const picks = pool.slice(0, total);
+        picks.forEach(item=>{
+          const img = document.createElement('img');
+          img.loading = 'lazy'; img.decoding = 'async';
+          img.src = item.src; img.alt = item.alt;
+          grid.appendChild(img);
+        });
+        frag.appendChild(grid);
+      }
+
+      if(key==='software'){
+        const wrap = document.createElement('div'); wrap.className = 'video-wrap';
+        const thumb = document.createElement('div');
+        thumb.className = 'video-thumb';
+        thumb.style.backgroundImage = `url('./images/software-playlist-thumb.png')`;
+        thumb.setAttribute('role','button');
+        thumb.setAttribute('aria-label','Play talks playlist');
+        thumb.tabIndex = 0;
+
+        const iframe = document.createElement('iframe');
+        iframe.title = 'Talks by Katrina Verey';
+        iframe.loading = 'lazy';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        const PLAYLIST_ID = 'PLbQ4eioQT6QPBat3jZPcdUfHmE18bVGFg';
+        const YT_SRC = 'https://www.youtube-nocookie.com/embed/videoseries?list=' + PLAYLIST_ID
+          + '&listType=playlist&rel=0&modestbranding=1&autohide=1&playsinline=1&controls=1'
+          + '&origin=' + encodeURIComponent(location.origin);
+
+        function activate(){
+          if(!iframe.src) iframe.src = YT_SRC;
+          thumb.classList.add('hidden');
+        }
+        thumb.addEventListener('click', activate);
+        thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
+
+        wrap.appendChild(thumb);
+        wrap.appendChild(iframe);
+        frag.appendChild(wrap);
+      }
+
+      if(data.cta){ const a=document.createElement('a'); a.className='link'; a.href=data.cta.href; a.target='_blank'; a.rel='noopener'; a.innerHTML = '<span class="emoji" aria-hidden="true">🔬</span>' + data.cta.text; frag.appendChild(a); }
       return frag;
     }
 
@@ -188,9 +367,10 @@
       // set active state
       [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
       btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      localStorage.setItem(TAB_KEY, theme);
 
       // begin background crossfade first
-      const bg = IMAGES[theme];
+      const bg = getBgFor(theme);
       if(bg) setBg(bg);
 
       // then swap content with a slight stagger
@@ -200,25 +380,106 @@
       shell.scrollIntoView({behavior:'smooth', block:'center'});
     });
 
-    // Init: default to Biomedical open
-    (function init(){
-      const initial = IMAGES.biomed || IMAGES.hero || IMAGES.software || IMAGES.linguistics;
-      if(initial) setBg(initial, true);
-      shell.classList.add('open');
-      renderActive('biomed');
-      setTimeout(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; }, 0);
-      document.getElementById('year').textContent = new Date().getFullYear();
+    timeline.addEventListener('keydown', (e)=>{
+      const buttons = Array.from(timeline.querySelectorAll('button'));
+      const idx = buttons.findIndex(b=> b.classList.contains('active'));
+      const focusTo = (i)=>{ buttons[i].focus(); buttons[i].click(); };
+      if(['ArrowRight','ArrowDown'].includes(e.key)){ e.preventDefault(); focusTo((idx+1)%buttons.length); }
+      if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); focusTo((idx-1+buttons.length)%buttons.length); }
+      if(e.key==='Home'){ e.preventDefault(); focusTo(0); }
+      if(e.key==='End'){ e.preventDefault(); focusTo(buttons.length-1); }
+    });
 
-      // --- lightweight runtime checks (non-fatal) ---
-      try{
-        // background layer toggles on immediate swap
-        const before = bgTop; setBg(IMAGES.software, true); console.assert(bgTop !== before, 'bg layer should toggle on immediate');
-        // details reflow increases for biomed vs software (biomed has CTA)
-        renderActive('software'); const h1 = detailsInner.scrollHeight; renderActive('biomed'); const h2 = detailsInner.scrollHeight; console.assert(h2 >= h1, 'biomed should be same height or taller');
-        // restore bg
-        setBg(initial, true);
-      }catch(e){ /* no-op in production */ }
+    // Init: restore theme and last tab
+    (function init(){
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', initialTheme);
+      themeBtn && themeBtn.setAttribute('aria-pressed', initialTheme==='light' ? 'true' : 'false');
+
+      // Restore active tab
+      const savedTab = localStorage.getItem(TAB_KEY) || 'biomed';
+      const btn = timeline.querySelector(`button[data-theme="${savedTab}"]`) || timeline.querySelector('button[data-theme="biomed"]');
+      [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+
+      // Set background per current theme and tab
+      const initialBg = getBgFor(btn.dataset.theme);
+      if(initialBg) setBg(initialBg, true);
+
+      shell.classList.add('open');
+      // Build details for the active tab
+      detailsInner.innerHTML = '';
+      detailsInner.appendChild(buildDetails(btn.dataset.theme));
+      setTimeout(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; }, 0);
+
+      document.getElementById('year').textContent = new Date().getFullYear();
     })();
+
+    // Press and hold to peek background
+    (function pressAndHoldPeek(){
+      const card = document.getElementById('shell');
+      if(!card) return;
+
+      function isOnBackground(e){
+        const r = card.getBoundingClientRect();
+        const x = e.clientX, y = e.clientY;
+        // True if the pointer is outside the card bounds
+        return (x < r.left || x > r.right || y < r.top || y > r.bottom);
+      }
+
+      let holding = false;
+      let pressTimer;
+      function onPointerMove(e){
+        if(!holding) return;
+        if(isOnBackground(e)) card.classList.add('peek-bg');
+        else card.classList.remove('peek-bg');
+      }
+      function endHold(){
+        clearTimeout(pressTimer);
+        holding = false;
+        card.classList.remove('peek-bg');
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', endHold);
+        window.removeEventListener('pointercancel', endHold);
+        window.removeEventListener('blur', endHold);
+      }
+
+      function onPointerDown(e){
+        // Primary mouse or touch only
+        const primaryMouse = (e.pointerType === 'mouse' && e.button === 0);
+        const touch = (e.pointerType === 'touch');
+        if(!(primaryMouse || touch)) return;
+        if(!isOnBackground(e)) return; // must start on background
+
+        pressTimer = setTimeout(()=>{
+          holding = true;
+          if(isOnBackground(e)) card.classList.add('peek-bg');
+          window.addEventListener('pointermove', onPointerMove, {passive:true});
+        }, 250); // 250ms hold before triggering
+
+        window.addEventListener('pointerup', endHold, {once:true});
+        window.addEventListener('pointercancel', endHold, {once:true});
+        window.addEventListener('blur', endHold, {once:true});
+      }
+
+      // Listen on the document so background clicks anywhere outside the card are captured
+      document.addEventListener('pointerdown', onPointerDown);
+    })();
+    // Gallery resize handler (keep rows full when width changes)
+    let galleryResizeTO;
+    window.addEventListener('resize', ()=>{
+      clearTimeout(galleryResizeTO);
+      galleryResizeTO = setTimeout(()=>{
+        const activeBtn = timeline.querySelector('button.active');
+        if(activeBtn && activeBtn.dataset.theme === 'biomed'){
+          detailsInner.innerHTML = '';
+          detailsInner.appendChild(buildDetails('biomed'));
+          details.style.maxHeight = detailsInner.scrollHeight + 'px';
+        }
+      }, 150);
+    });
   </script>
 </body>
 </html>
