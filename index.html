@@ -5,6 +5,46 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Katrina Verey — kats.cloud</title>
   <meta name="description" content="Katrina Verey's personal website" />
+  <!-- UX polish: let browsers know we support both color schemes, and set themed address-bar colors -->
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d9dfe6">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14">
+
+  <!-- Social cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Katrina Verey — kats.cloud">
+  <meta property="og:description" content="Katrina Verey's personal website">
+  <meta property="og:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg">
+  <meta property="og:url" content="https://kats.cloud/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Katrina Verey — kats.cloud">
+  <meta name="twitter:description" content="Katrina Verey's personal website">
+  <meta name="twitter:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg">
+  <link rel="canonical" href="https://kats.cloud/">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Katrina Verey",
+    "url": "https://kats.cloud/",
+    "image": "https://kats.cloud/images/knverey.jpg",
+    "sameAs": [
+      "https://www.linkedin.com/in/knverey",
+      "https://github.com/KnVerey",
+      "https://www.instagram.com/microcosmonaut.kat"
+    ],
+    "jobTitle": "Student, Translational & Molecular Medicine / Cellular & Molecular Medicine",
+    "disambiguatingDescription": "Former software engineer at Shopify and Apple; now focused on biomedical research.",
+    "affiliation": [
+      {
+        "@type": "Organization",
+        "name": "University of Ottawa",
+        "url": "https://www.uottawa.ca/"
+      }
+    ]
+  }
+  </script>
   <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,11 +116,11 @@
     }
     .sub{font-size:15px;color:var(--muted);margin:0}
 
-    .timeline{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px 0 6px}
-    .timeline button{background:transparent;border:2px solid transparent;color:var(--accent-1);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14.5px;transition:background .18s,color .18s,border .18s}
-    .timeline button.active{background:var(--accent-1);color:#fff;border-color:var(--accent-2)}
-    .timeline button:focus-visible{outline:2px solid var(--accent-1); outline-offset:2px}
-    .timeline button:hover:not(.active){background:rgba(75,134,180,0.08);color:var(--accent-3)}
+    .disciplines-nav{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px 0 6px}
+    .disciplines-nav button{background:transparent;border:2px solid transparent;color:var(--accent-1);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14.5px;transition:background .18s,color .18s,border .18s}
+    .disciplines-nav button.active{background:var(--accent-1);color:#fff;border-color:var(--accent-2)}
+    .disciplines-nav button:focus-visible{outline:2px solid var(--accent-1); outline-offset:2px}
+    .disciplines-nav button:hover:not(.active){background:rgba(75,134,180,0.08);color:var(--accent-3)}
 
     .theme-toggle{position:absolute; right:14px; top:14px; display:inline-flex; align-items:center; justify-content:center; width:38px; height:34px; border-radius:8px; border:1px solid rgba(0,0,0,.12); cursor:pointer; color:var(--text); box-shadow:0 6px 16px rgba(0,0,0,.18); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));}
     html[data-theme="light"] .theme-toggle{background:#fff; box-shadow:0 6px 16px rgba(16,30,54,.12)}
@@ -144,14 +184,14 @@
     @media (max-width:640px){
       .head{padding:22px 16px 12px}
       .details-inner{padding:0 16px 12px}
-      .timeline button{ padding:10px 14px; font-size:15px }
-      .timeline{ flex-wrap: wrap; gap:8px; padding:12px 8px 6px; }
-      .timeline button{ font-size:13.5px; padding:8px 10px; }
+      .disciplines-nav button{ padding:10px 14px; font-size:15px }
+      .disciplines-nav{ flex-wrap: wrap; gap:8px; padding:12px 8px 6px; }
+      .disciplines-nav button{ font-size:13.5px; padding:8px 10px; }
     }
 
     @media (max-width:480px){
-      .timeline{ flex-wrap: wrap; gap:6px; padding:10px 8px 6px; }
-      .timeline button{ font-size:13px; padding:8px 10px; }
+      .disciplines-nav{ flex-wrap: wrap; gap:6px; padding:10px 8px 6px; }
+      .disciplines-nav button{ font-size:13px; padding:8px 10px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -182,10 +222,11 @@
         </button>
         <h1 class="name">Katrina Verey</h1>
         <p class="sub"></p>
-        <nav class="timeline" role="tablist" aria-label="Career themes" id="timeline" tabindex="-1">
-          <button id="tab-biomed" data-theme="biomed" class="active" aria-selected="true" aria-controls="detailsInner" tabindex="0">Biomedical Science</button>
-          <button id="tab-software" data-theme="software" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Software Development</button>
-          <button id="tab-linguistics" data-theme="linguistics" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Linguistic Services</button>
+        <!-- Tabs for the three sections (WAI-ARIA tabs pattern) -->
+        <nav class="disciplines-nav" role="tablist" aria-label="Career themes" id="disciplines-nav" tabindex="-1">
+          <button role="tab" id="tab-biomed" data-theme="biomed" class="active" aria-selected="true" aria-controls="detailsInner" tabindex="0">Biomedical Science</button>
+          <button role="tab" id="tab-software" data-theme="software" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Software Development</button>
+          <button role="tab" id="tab-linguistics" data-theme="linguistics" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Linguistic Services</button>
         </nav>
       </header>
 
@@ -281,13 +322,13 @@
       linguistics:{
         title:'Linguistic Services',
         text:`My career began in translation and editorial roles for public-sector and humanitarian organizations. Through this work, I honed my ability to convey complex information with clarity and precision, adapting language and style for diverse audiences. In 2023, I revived these skills as the substantive editor for much of Darren McKee's book <i>Uncontrollable: The Threat of Artificial Superintelligence and the Race to Save the World</i>, working closely with the author to strengthen its clarity, structure and readability.`,
-        cta: {text:'Find <i>Uncontrollable<\i> on Amazon →', href: 'https://a.co/d/gwpAkX2'}
+        cta: {text:'Find <i>Uncontrollable</i> on Amazon →', href: 'https://a.co/d/gwpAkX2'}
       }
     };
 
     // Elements
     const shell = document.getElementById('shell');
-    const timeline = document.getElementById('timeline');
+    const disciplinesNav = document.getElementById('disciplines-nav');
     const details = document.getElementById('details');
     const detailsInner = document.getElementById('detailsInner');
     const bgA = document.getElementById('bgA');
@@ -296,51 +337,61 @@
     const THEME_KEY = 'kats.theme';
     const TAB_KEY = 'kats.activeTab';
 
-    // When the timeline container itself receives focus (e.g., via JS or SR quick nav),
+    // When the nav container itself receives focus (e.g., via JS or SR quick nav),
     // move focus to the currently active tab button so arrow keys work as expected.
-    timeline.addEventListener('focus', () => {
-      const activeBtn = timeline.querySelector('button[aria-selected="true"]');
+    disciplinesNav.addEventListener('focus', () => {
+      const activeBtn = disciplinesNav.querySelector('button[aria-selected="true"]');
       if (activeBtn) activeBtn.focus();
     }, true);
 
-    // Background cross-fade state
-    let bgTop = 'A';
-    let fadeId = 0, fadeStartTO = null, flipTO = null;
-    function setBg(url, immediate=false){
-      if(!url) return;
-      // cancel any in-flight timers
-      if(fadeStartTO){ clearTimeout(fadeStartTO); fadeStartTO = null; }
-      if(flipTO){ clearTimeout(flipTO); flipTO = null; }
-      const myId = ++fadeId;
+    // Timings (ms)
+    let FADE_DELAY_MS   = 120;  // wait before starting bg crossfade
+    let FADE_FLIP_MS    = 720;  // when to flip the layers after fade
+    let DETAILS_SWAP_MS = 200;  // details fade-out before swapping content
+    let STAGGER_SWAP_MS = 160;  // delay before rendering content after tab click
+    try{
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        FADE_DELAY_MS = 0; FADE_FLIP_MS = 0; DETAILS_SWAP_MS = 0; STAGGER_SWAP_MS = 0;
+      }
+    }catch(_){/* noop */}
 
-      const top = (bgTop==='A') ? bgA : bgB;
-      const bottom = (bgTop==='A') ? bgB : bgA;
-      bottom.style.backgroundImage = `url(${url})`;
-      // Update background description for screen readers if a caption exists
-      (function(){
+    // Background cross-fade controller (encapsulates timers/state)
+    const bgController = (()=>{
+      let bgTop = 'A';
+      let fadeId = 0, fadeStartTO = null, flipTO = null;
+      function announce(url){
         const el = document.getElementById('bgDesc');
         if(!el) return;
         try{
           const fn = (url||'').split('/').pop();
           const val = MICRO_CAPTIONS && MICRO_CAPTIONS[fn];
           el.textContent = (typeof val === 'string' && val.trim()) ? val : '';
-        }catch(_){ /* noop */ }
-      })();
-
-      if(immediate){
-        top.classList.add('hidden');
-        bottom.classList.remove('hidden');
-        bgTop = (bgTop==='A') ? 'B' : 'A';
-        return;
+        }catch(_){/* noop */}
       }
-      // start crossfade after a small beat, then flip the active layer
-      fadeStartTO = setTimeout(()=>{
-        if(myId !== fadeId) return; // a newer fade started
-        bottom.classList.remove('hidden');
-        top.classList.add('hidden');
-        flipTO = setTimeout(()=>{ if(myId === fadeId) bgTop = (bgTop==='A') ? 'B' : 'A'; }, 720);
-      }, 120);
-    }
+      function set(url, immediate=false){
+        if(!url) return;
+        if(fadeStartTO){ clearTimeout(fadeStartTO); fadeStartTO = null; }
+        if(flipTO){ clearTimeout(flipTO); flipTO = null; }
+        const myId = ++fadeId;
+        const top = (bgTop==='A') ? bgA : bgB;
+        const bottom = (bgTop==='A') ? bgB : bgA;
+        bottom.style.backgroundImage = `url(${url})`;
+        announce(url);
+        if(immediate){
+          top.classList.add('hidden');
+          bottom.classList.remove('hidden');
+          bgTop = (bgTop==='A') ? 'B' : 'A';
+          return;
+        }
+        fadeStartTO = setTimeout(()=>{
+          if(myId !== fadeId) return;
+          bottom.classList.remove('hidden');
+          top.classList.add('hidden');
+          flipTO = setTimeout(()=>{ if(myId === fadeId) bgTop = (bgTop==='A') ? 'B' : 'A'; }, FADE_FLIP_MS);
+        }, FADE_DELAY_MS);
+      }
+      return { set };
+    })();
 
     // Safe localStorage helpers
     function lsGet(key){
@@ -370,11 +421,8 @@
       themeBtn && themeBtn.setAttribute('aria-pressed', t==='light' ? 'true' : 'false');
       lsSet(THEME_KEY, t);
       // if current active tab is biomed, refresh background to correct variant
-      const activeBtn = timeline.querySelector('button.active');
-      const key = activeBtn ? activeBtn.dataset.theme : 'biomed';
-      const bg = getBgFor(key);
-      ensurePreload(bg);
-      if(bg) setBg(bg, true);
+      const key = (disciplinesNav.querySelector('button.active') || {}).dataset?.theme || 'biomed';
+      updateBackgroundFor(key, /*immediate*/ true);
       // if biomed is displayed, rebuild details to refresh gallery to current theme set
       if(key==='biomed'){
         detailsInner.innerHTML = '';
@@ -392,91 +440,200 @@
     // Track gallery ResizeObserver for cleanup
     let galleryRO = null;
 
-    function buildDetails(key){
-      const data = CONTENT[key];
+    // --- Utility helpers -------------------------------------------------------
+    function shuffle(arr){
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    function pickN(arr, n){
+      return arr.slice(0, Math.max(0, Math.min(n, arr.length)));
+    }
+
+    // Create a consistent CTA anchor element
+    function renderCTA(cta){
+      if(!cta) return null;
+      const a = document.createElement('a');
+      a.className = 'link';
+      a.href = cta.href; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = cta.text;
+      return a;
+    }
+
+    // --- Tiny DOM helpers --------------------------------------------------------
+    function hEl(tag, props={}, ...children){
+      const el = document.createElement(tag);
+      for(const [k,v] of Object.entries(props||{})){
+        if (k === 'className') el.className = v;
+        else if (k === 'dataset') Object.assign(el.dataset, v);
+        else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+        else if (k in el) el[k] = v; else el.setAttribute(k, v);
+      }
+      for(const c of children){ if (c==null) continue; el.appendChild(typeof c==='string'? document.createTextNode(c) : c); }
+      return el;
+    }
+
+    function cssNumber(varName, fallback){
+      const v = getComputedStyle(document.documentElement).getPropertyValue(varName);
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function buildPlaylistEmbedSrc(playlistId){
+      const base = 'https://www.youtube-nocookie.com/embed/videoseries';
+      const params = new URLSearchParams({
+        list: playlistId,
+        listType: 'playlist',
+        rel: '0', modestbranding: '1', autohide: '1', playsinline: '1', controls: '1',
+        origin: location.origin
+      });
+      return `${base}?${params.toString()}`;
+    }
+
+    // Keep tagline consistent across visible UI, social meta, and JSON‑LD
+    function setGlobalTagline(tagline){
+      // Visible byline
+      const sub = document.querySelector('.sub');
+      if (sub) sub.textContent = tagline;
+      // OpenGraph / Twitter
+      const og = document.querySelector('meta[property="og:description"]');
+      if (og) og.setAttribute('content', tagline);
+      const tw = document.querySelector('meta[name="twitter:description"]');
+      if (tw) tw.setAttribute('content', tagline);
+      // JSON‑LD Person schema
+      const ld = document.querySelector('script[type="application/ld+json"]');
+      if (ld) {
+        try {
+          const data = JSON.parse(ld.textContent || '{}');
+          data.description = tagline;
+          ld.textContent = JSON.stringify(data);
+        } catch (_) { /* noop */ }
+      }
+    }
+
+    function setActiveButton(btn){
+      const container = btn.parentElement;
+      [...container.querySelectorAll('button')].forEach(b=>{
+        b.classList.remove('active');
+        b.setAttribute('aria-selected','false');
+        b.setAttribute('tabindex','-1');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      btn.setAttribute('tabindex','0');
+      btn.focus({preventScroll:true});
+      detailsInner.setAttribute('aria-labelledby', btn.id);
+    }
+
+    function updateBackgroundFor(theme, immediate=false){
+      const bg = getBgFor(theme);
+      ensurePreload(bg);
+      if (bg) bgController.set(bg, immediate);
+    }
+
+    function activateTab(theme, opts={scroll:true, instant:false}){
+      const btn = disciplinesNav.querySelector(`button[data-theme="${theme}"]`);
+      if(!btn) return;
+      setActiveButton(btn);
+      lsSet(TAB_KEY, theme);
+
+      if (opts.instant) {
+        updateBackgroundFor(theme, /*immediate*/ true);
+        renderActive(theme, true);
+      } else {
+        updateBackgroundFor(theme);
+        setTimeout(()=>{ renderActive(theme); }, STAGGER_SWAP_MS);
+      }
+
+      if (opts.scroll) shell.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    // --- Section renderers -----------------------------------------------------
+    function renderBiomedSection(){
+      const data = CONTENT.biomed;
       const frag = document.createDocumentFragment();
-      const h = document.createElement('h2'); h.className = 'section-title'; h.textContent = data.title;
-      const p = document.createElement('p');
-      p.className = 'copy';
-      p.innerHTML = data.text; // allows <em>, <strong>, etc.
-      frag.appendChild(h); frag.appendChild(p);
+      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
+      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
 
-      if(key==='biomed'){
-        const grid = document.createElement('div'); grid.className = 'media-grid'; grid.setAttribute('aria-label','Microscopy gallery');
-        const pool = (currentTheme()==='light' ? GALLERY_LIGHT : GALLERY_DARK).slice();
-        for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
-        const maxPool = pool.slice(0, 8); // up to 8, we will show fewer based on width
-        maxPool.forEach(item=>{
-          const img = document.createElement('img');
-          img.loading = 'lazy'; img.decoding = 'async';
-          img.src = item.src; img.alt = captionFor(item.src);
-          grid.appendChild(img);
-        });
+      const grid = hEl('div',{className:'media-grid', 'aria-label':'Microscopy gallery'});
+      const pool = shuffle((currentTheme()==='light' ? GALLERY_LIGHT : GALLERY_DARK).slice());
+      const maxPool = pickN(pool, 8);
+      maxPool.forEach(item=>{
+        const img = hEl('img', { loading:'lazy', decoding:'async', src:item.src, alt:captionFor(item.src) });
+        grid.appendChild(img);
+      });
 
-        // Clean up previous gallery observer
-        if (galleryRO) { try { galleryRO.disconnect(); } catch(_){} }
-        // Container-aware columns & counts (even, full rows)
-        galleryRO = new ResizeObserver(entries=>{
-          const w = entries[0].contentRect.width;
-          const MIN = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tile-min')) || 140;
-          const GAP = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--grid-gap')) || 10;
-          let cols = 2;
-          if (w >= 4*MIN + 3*GAP) cols = 4;
-          else if (w >= 3*MIN + 2*GAP) cols = 3;
-          else cols = 2;
-          const total = cols * 2;
-          grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-          Array.from(grid.children).forEach((el, i)=> el.style.display = (i < total) ? '' : 'none');
-          requestAnimationFrame(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; });
-        });
-        galleryRO.observe(grid);
-        frag.appendChild(grid);
-      }
+      if (galleryRO) { try { galleryRO.disconnect(); } catch(_){} }
+      galleryRO = new ResizeObserver(entries=>{
+        const w = entries[0].contentRect.width;
+        const MIN = cssNumber('--tile-min', 140);
+        const GAP = cssNumber('--grid-gap', 10);
+        let cols = 2;
+        if (w >= 4*MIN + 3*GAP) cols = 4; else if (w >= 3*MIN + 2*GAP) cols = 3; else cols = 2;
+        const total = cols * 2;
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        Array.from(grid.children).forEach((el, i)=> el.style.display = (i < total) ? '' : 'none');
+        requestAnimationFrame(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; });
+      });
+      galleryRO.observe(grid);
+      frag.appendChild(grid);
 
-      if(key==='software'){
-        const wrap = document.createElement('div'); wrap.className = 'video-wrap';
-        const thumb = document.createElement('div');
-        thumb.className = 'video-thumb';
-        thumb.style.backgroundImage = `url('./images/software-playlist-thumb.png')`;
-        thumb.setAttribute('role','button');
-        thumb.setAttribute('aria-label','Play talks playlist');
-        thumb.tabIndex = 0;
-        thumb.setAttribute('aria-pressed','false');
-
-        const iframe = document.createElement('iframe');
-        iframe.title = 'Talks by Katrina Verey';
-        iframe.loading = 'lazy';
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-        iframe.allowFullscreen = true;
-        iframe.id = 'software-video-iframe';
-        thumb.setAttribute('aria-controls', iframe.id);
-        thumb.setAttribute('aria-describedby', 'soft-desc');
-        const YT_PLAYLIST_EMBED = 'https://www.youtube-nocookie.com/embed/videoseries?list=' + PLAYLIST_ID
-        + '&listType=playlist&rel=0&modestbranding=1&autohide=1&playsinline=1&controls=1'
-        + '&origin=' + encodeURIComponent(location.origin);
-
-        function activate(){
-          if(!iframe.src) iframe.src = YT_PLAYLIST_EMBED;
-          thumb.classList.add('hidden');
-          thumb.setAttribute('aria-pressed','true');
-          thumb.setAttribute('aria-hidden','true');
-          setTimeout(()=>{ iframe.focus && iframe.focus(); }, 50);
-        }
-        thumb.addEventListener('click', activate);
-        thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
-
-        const sr = document.createElement('span');
-        sr.id = 'soft-desc';
-        sr.className = 'visually-hidden';
-        sr.textContent = 'Press to load and play a YouTube playlist of talks';
-        wrap.appendChild(sr);
-        wrap.appendChild(thumb);
-        wrap.appendChild(iframe);
-        frag.appendChild(wrap);
-      }
-
-      if(data.cta){ const a=document.createElement('a'); a.className='link'; a.href=data.cta.href; a.target='_blank'; a.rel='noopener'; a.innerHTML = data.cta.text; frag.appendChild(a); }
+      const ctaEl = renderCTA(data.cta);
+      if (ctaEl) frag.appendChild(ctaEl);
       return frag;
+    }
+
+    function renderSoftwareSection(){
+      const data = CONTENT.software;
+      const frag = document.createDocumentFragment();
+      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
+      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
+
+      const wrap = hEl('div',{className:'video-wrap'});
+      const thumb = hEl('div',{className:'video-thumb', role:'button', 'aria-label':'Play talks playlist', tabIndex:0, 'aria-pressed':'false'});
+      const iframe = hEl('iframe',{
+        title:'Talks by Katrina Verey',
+        loading:'lazy',
+        allow:'encrypted-media; picture-in-picture', // no autoplay; user must click overlay
+        id:'software-video-iframe',
+        allowFullscreen:true
+      });
+      thumb.setAttribute('aria-controls', iframe.id);
+      thumb.setAttribute('aria-describedby', 'soft-desc');
+      const YT_PLAYLIST_EMBED = buildPlaylistEmbedSrc(PLAYLIST_ID);
+
+      thumb.style.backgroundImage = "url('./images/software-playlist-thumb.png')";
+
+      function activate(){ if(!iframe.src) iframe.src = YT_PLAYLIST_EMBED; thumb.classList.add('hidden'); thumb.setAttribute('aria-pressed','true'); thumb.setAttribute('aria-hidden','true'); setTimeout(()=>{ iframe.focus && iframe.focus(); }, 50); }
+      thumb.addEventListener('click', activate);
+      thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
+
+      wrap.appendChild(hEl('span',{id:'soft-desc', className:'visually-hidden', textContent:'Press to load and play a YouTube playlist of talks'}));
+      wrap.appendChild(thumb);
+      wrap.appendChild(iframe);
+      frag.appendChild(wrap);
+
+      const ctaEl = renderCTA(data.cta);
+      if (ctaEl) frag.appendChild(ctaEl);
+      return frag;
+    }
+
+    function renderLinguisticsSection(){
+      const data = CONTENT.linguistics;
+      const frag = document.createDocumentFragment();
+      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
+      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
+      const ctaEl = renderCTA(data.cta);
+      if (ctaEl) frag.appendChild(ctaEl);
+      return frag;
+    }
+
+    function buildDetails(key){
+      if(key==='biomed') return renderBiomedSection();
+      if(key==='software') return renderSoftwareSection();
+      return renderLinguisticsSection();
     }
 
     // Animate details swap
@@ -499,42 +656,18 @@
           detailsInner.style.opacity = 1;
           detailsInner.style.transform = 'translateY(0)';
         });
-      }, 200);
+      }, DETAILS_SWAP_MS);
     }
 
     // Click/tap handling
-    timeline.addEventListener('click', (ev)=>{
+    disciplinesNav.addEventListener('click', (ev)=>{
       const btn = ev.target.closest('button');
       if(!btn) return;
-      const theme = btn.dataset.theme;
-
-      // set active state, roving tabindex, ARIA tabpanel label
-      [...timeline.querySelectorAll('button')].forEach(b=>{
-        b.classList.remove('active');
-        b.setAttribute('aria-selected','false');
-        b.setAttribute('tabindex','-1');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected','true');
-      btn.setAttribute('tabindex','0');
-      btn.focus({preventScroll:true});
-      document.getElementById('detailsInner').setAttribute('aria-labelledby', btn.id);
-      lsSet(TAB_KEY, theme);
-
-      // begin background crossfade
-      const bg = getBgFor(theme);
-      ensurePreload(bg);
-      if(bg) setBg(bg);
-
-      // swap content after a short delay
-      setTimeout(()=>{ renderActive(theme); }, 160);
-
-      // keep card in view
-      shell.scrollIntoView({behavior:'smooth', block:'center'});
+      activateTab(btn.dataset.theme);
     });
 
-    timeline.addEventListener('keydown', (e)=>{
-      const buttons = Array.from(timeline.querySelectorAll('button'));
+    disciplinesNav.addEventListener('keydown', (e)=>{
+      const buttons = Array.from(disciplinesNav.querySelectorAll('button'));
       const idx = buttons.findIndex(b=> b.classList.contains('active'));
       const focusTo = (i)=>{
         buttons.forEach((b, j)=> b.setAttribute('tabindex', j===i ? '0' : '-1'));
@@ -555,27 +688,11 @@
       document.documentElement.setAttribute('data-theme', initialTheme);
       themeBtn && themeBtn.setAttribute('aria-pressed', initialTheme==='light' ? 'true' : 'false');
 
-      // Restore active tab
       const savedTab = lsGet(TAB_KEY) || 'biomed';
-      const btn = timeline.querySelector(`button[data-theme="${savedTab}"]`) || timeline.querySelector('button[data-theme="biomed"]');
-      [...timeline.querySelectorAll('button')].forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-      // roving tabindex
-      [...timeline.querySelectorAll('button')].forEach(b=> b.setAttribute('tabindex', b===btn ? '0' : '-1'));
-      // ensure tabpanel is labelled by the active tab
-      document.getElementById('detailsInner').setAttribute('aria-labelledby', btn.id);
-
-      // Set background per current theme and tab
-      const initialBg = getBgFor(btn.dataset.theme);
-      ensurePreload(initialBg);
-      if(initialBg) setBg(initialBg, true);
-
-      shell.classList.add('open');
-      // Build details for the active tab
-      renderActive(btn.dataset.theme, true);
+      activateTab(savedTab, { scroll:false, instant:true });
 
       document.getElementById('year').textContent = new Date().getFullYear();
-      document.querySelector('.sub').textContent = CONTENT.tagline;
+      setGlobalTagline(CONTENT.tagline);
     })();
 
     // Press and hold to peek background

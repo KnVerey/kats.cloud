@@ -5,8 +5,8 @@ const sel = {
   shell: '#shell',
   bgA: '#bgA',
   bgB: '#bgB',
-  timeline: '#timeline',
-  tabBtn: (key) => `#timeline button[data-theme="${key}"]`,
+  nav: '#disciplines-nav',
+  tabBtn: (key) => `#disciplines-nav button[data-theme="${key}"]`,
   details: '#details',
   panel: '#detailsInner',
   gallery: '.media-grid',
@@ -28,11 +28,21 @@ async function visibleGridCount(page) {
   );
 }
 
-/** Utility: read which bg layer shows a given url */
+/** Utility: does the VISIBLE bg layer include a given URL fragment? */
 async function bgHasURL(page, urlPart) {
-  const a = await page.$eval(sel.bgA, el => getComputedStyle(el).backgroundImage);
-  const b = await page.$eval(sel.bgB, el => getComputedStyle(el).backgroundImage);
-  return (a.includes(urlPart) || b.includes(urlPart));
+  return page.$eval('.bg-layer:not(.hidden)', (el, needle) => {
+    const bg = getComputedStyle(el).backgroundImage || '';
+    return bg.includes(needle);
+  }, urlPart);
+}
+
+async function waitForBg(page, urlPart){
+  await page.waitForFunction((needle)=>{
+    const el = document.querySelector('.bg-layer:not(.hidden)');
+    if(!el) return false;
+    const bg = getComputedStyle(el).backgroundImage || '';
+    return bg.includes(needle);
+  }, urlPart);
 }
 
 async function liveBgText(page){
@@ -60,8 +70,8 @@ test('tabs have proper ARIA + roving tabindex and update on click', async ({ pag
 });
 
 test('keyboard navigation: arrows + Home/End update selection and focus', async ({ page }) => {
-  const timeline = page.locator(sel.timeline);
-  await timeline.focus();
+  const disciplinesNav = page.locator(sel.nav);
+  await disciplinesNav.focus();
 
   // Nudge focus into the active button if the container swallowed focus
   await page.waitForTimeout(30);
@@ -89,13 +99,20 @@ test('theme toggle persists and sets correct biomed background (micro1[-light])'
   // Ensure Biomed tab is active for a deterministic background check
   await page2.click(sel.tabBtn('biomed'));
 
+  // Ensure theme is light (in case persistence failed or was interfered with by another test)
+  await page2.evaluate(() => document.documentElement.getAttribute('data-theme'))
+    .then(async t => { if(t !== 'light') await page2.click('#themeToggle'); });
+
+  // Wait until the biomed-light background is actually painted on the visible layer
+  await waitForBg(page2, 'micro1-light.jpg');
+
   // Last selected tab should restore (biomed by default on first run)
   // Background for biomed (light) should include micro1-light.jpg
   await expect(await bgHasURL(page2, 'micro1-light.jpg')).toBeTruthy();
 
   // Toggle back to dark, bg should show micro1.jpg
   await page2.click('#themeToggle');
-  await expect(await bgHasURL(page2, 'micro1.jpg')).toBeTruthy();
+  await waitForBg(page2, 'micro1.jpg');
 });
 
 test('background live region announces caption on load and after theme toggle', async ({ page }) => {
