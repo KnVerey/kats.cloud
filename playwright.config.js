@@ -1,8 +1,8 @@
-// @ts-check
 const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './test',
+  testMatch: /.*\.spec\.(ts|js)/,
   fullyParallel: true,
   retries: 0,
   use: {
