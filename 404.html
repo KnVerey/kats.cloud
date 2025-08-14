@@ -10,23 +10,25 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14" />
     <style>
       :root {
-        --bg: #d9dfe6; /* light base */
-        --text: #0b0f14;
-        --card: #ffffff; /* light card */
-        --muted: #44546a;
-        --accent-1: #2f5e82; /* accessible blue vs white */
-        --accent-2: #6ea6c8;
-        --radius: 16px;
-        --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        /* light theme */
+        --bg: #d9dfe6; /* base */
+        --text: #0b0f14; /* primary text */
+        --muted: #44546a; /* secondary text */
+        --card-bg: #f0f4f8; /* updated card background for better contrast */
+        --card-border: rgba(0, 0, 0, 0.08);
+        /* semantic accents */
+        --pill-active-bg: #2f5e82; /* primary accent (buttons) */
+        --pill-border: #6ea6c8; /* focus ring/border */
       }
       @media (prefers-color-scheme: dark) {
         :root {
           --bg: #0b0f14; /* dark base */
-          --text: #e6edf3;
-          --card: #0f1318; /* dark card */
-          --muted: #a9b6c2;
-          --accent-1: #2f5e82; /* same accessible blue */
-          --accent-2: #6ea6c8;
+          --text: #e6edf3; /* primary text */
+          --muted: #a9b6c2; /* secondary text */
+          --card-bg: #2f5e82; /* lighter for better contrast with black cat */
+          --card-border: rgba(255, 255, 255, 0.08);
+          --pill-active-bg: #2a4f6b;
+          --pill-border: #4f7898;
         }
       }
       * {
@@ -60,10 +62,11 @@
         padding: 24px;
       }
       .card {
-        background: var(--card);
+        background: var(--card-bg);
         color: var(--text);
-        border-radius: var(--radius);
+        border-radius: 16px; /* softer rounded corners */
         box-shadow: var(--shadow);
+        border: 1px solid var(--card-border);
         padding: 28px 28px 24px;
         text-align: center;
         max-width: 560px;
@@ -75,6 +78,10 @@
         object-fit: contain;
         display: block;
         margin: 0 auto 12px;
+        background: transparent; /* no background behind image */
+        border: none;
+        border-radius: 0;
+        padding: 0;
       }
       h1 {
         margin: 8px 0 6px;
@@ -98,16 +105,19 @@
         border-radius: 10px;
         text-decoration: none;
         font-weight: 600;
-        background: var(--accent-1);
-        color: #fff;
+        background: var(--pill-active-bg);
+        color: #e6eef6; /* softer than pure white in dark */
         box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
       }
       a.button:hover {
         filter: brightness(1.05);
       }
       a.button:focus-visible {
-        outline: 2px solid var(--accent-2);
+        outline: 2px solid var(--pill-border);
         outline-offset: 2px;
+      }
+      .small {
+        color: var(--muted);
       }
     </style>
   </head>
