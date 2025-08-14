@@ -28,6 +28,21 @@ async function visibleGridCount(page) {
   );
 }
 
+/** Wait until the grid has settled: visible tiles match columns * 2 and occupy exactly two rows */
+async function waitForGridStable(page){
+  await page.waitForFunction(() => {
+    const grid = document.querySelector('.media-grid');
+    if(!grid) return false;
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    const imgs = Array.from(grid.querySelectorAll('img'))
+      .filter(el => getComputedStyle(el).display !== 'none');
+    const visible = imgs.length;
+    // Count distinct row positions among visible tiles
+    const rows = new Set(imgs.map(el => Math.round(el.getBoundingClientRect().top))).size;
+    return visible === cols * 2 && rows === 2;
+  });
+}
+
 /** Utility: does the VISIBLE bg layer include a given URL fragment? */
 async function bgHasURL(page, urlPart) {
   return page.$eval('.bg-layer:not(.hidden)', (el, needle) => {
@@ -134,7 +149,7 @@ test('biomed gallery is container-aware and shows full even rows', async ({ page
 
   async function expectRowsFor(width){
     await page.setViewportSize({ width, height: 900 });
-    await page.waitForTimeout(180);
+    await waitForGridStable(page);
     const cols = await page.$eval(sel.gallery, el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
     const expected = cols * 2; // two full rows always
     const count = await visibleGridCount(page);

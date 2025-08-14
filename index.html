@@ -52,8 +52,8 @@
   <style>
     :root{
       /* theme palettes */
-      --accent-1: #4b86b4;
-      --accent-2: #e3b04b;
+      --accent-1: #2f5e82;
+      --accent-2: #6ea6c8;
       --accent-3: #4b7ea8;
       --bg: #000;            /* dark base to avoid flash on background swap */
       --text: #1a2233;
@@ -513,7 +513,7 @@
       }
     }
 
-    function setActiveButton(btn){
+    function setActiveButton(btn, { focus = true } = {}){
       const container = btn.parentElement;
       [...container.querySelectorAll('button')].forEach(b=>{
         b.classList.remove('active');
@@ -523,7 +523,7 @@
       btn.classList.add('active');
       btn.setAttribute('aria-selected','true');
       btn.setAttribute('tabindex','0');
-      btn.focus({preventScroll:true});
+      if (focus) btn.focus({preventScroll:true});
       detailsInner.setAttribute('aria-labelledby', btn.id);
     }
 
@@ -536,7 +536,7 @@
     function activateTab(theme, opts={scroll:true, instant:false}){
       const btn = disciplinesNav.querySelector(`button[data-theme="${theme}"]`);
       if(!btn) return;
-      setActiveButton(btn);
+      setActiveButton(btn, { focus: opts.focus });
       lsSet(TAB_KEY, theme);
 
       if (opts.instant) {
@@ -689,7 +689,7 @@
       themeBtn && themeBtn.setAttribute('aria-pressed', initialTheme==='light' ? 'true' : 'false');
 
       const savedTab = lsGet(TAB_KEY) || 'biomed';
-      activateTab(savedTab, { scroll:false, instant:true });
+      activateTab(savedTab, { scroll:false, instant:true, focus:false });
 
       document.getElementById('year').textContent = new Date().getFullYear();
       setGlobalTagline(CONTENT.tagline);
