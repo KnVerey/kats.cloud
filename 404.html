@@ -1,22 +1,126 @@
 <!doctype html>
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="main.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/cumulus-cat-cloud-outlined-black.png">
-</head>
-
-<body class="bg-white">
-  <div class="flex flex-row min-h-screen items-center">
-    <!-- main box -->
-    <div class="mx-auto bg-cc-gold rounded-md p-10 text-stone-800">
-      <img src="images/cumulus-cat.png"
-      alt="Cumulus Cat Logo" class="h-[200px] w-[200px]">
-      <h1 class="text-2xl sm:text-3xl font-semibold pt-5 text-center">404 Not Found</h1>
-    </div>
-  </div>
-</body>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — kats.cloud</title>
+    <link rel="icon" type="image/png" href="images/cumulus-cat-cloud-outlined-black.png" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d9dfe6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14" />
+    <style>
+      :root {
+        --bg: #d9dfe6; /* light base */
+        --text: #0b0f14;
+        --card: #ffffff; /* light card */
+        --muted: #44546a;
+        --accent-1: #2f5e82; /* accessible blue vs white */
+        --accent-2: #6ea6c8;
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b0f14; /* dark base */
+          --text: #e6edf3;
+          --card: #0f1318; /* dark card */
+          --muted: #a9b6c2;
+          --accent-1: #2f5e82; /* same accessible blue */
+          --accent-2: #6ea6c8;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          400 16px/1.5 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          Noto Sans,
+          'Helvetica Neue',
+          Arial,
+          'Apple Color Emoji',
+          'Segoe UI Emoji';
+      }
+      .main {
+        min-height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .card {
+        background: var(--card);
+        color: var(--text);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 28px 28px 24px;
+        text-align: center;
+        max-width: 560px;
+        width: 100%;
+      }
+      .card img {
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto 12px;
+      }
+      h1 {
+        margin: 8px 0 6px;
+        font-size: clamp(22px, 3vw, 28px);
+        line-height: 1.2;
+      }
+      p {
+        margin: 0 0 16px;
+      }
+      .actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      a.button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        background: var(--accent-1);
+        color: #fff;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+      }
+      a.button:hover {
+        filter: brightness(1.05);
+      }
+      a.button:focus-visible {
+        outline: 2px solid var(--accent-2);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main" role="main">
+      <section class="card" aria-labelledby="nf-title">
+        <img src="images/cumulus-cat-cloud-outlined.png" alt="Cumulus Cat logo" />
+        <h1 id="nf-title">404 — Page not found</h1>
+        <p>Sorry, we can’t find that page.</p>
+        <div class="actions">
+          <a class="button" href="/">Go to homepage</a>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

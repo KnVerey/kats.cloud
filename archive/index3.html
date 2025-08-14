@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <script>
+      document.documentElement.classList.add('preload');
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Katrina Verey — kats.cloud</title>
+    <meta
+      name="description"
+      content="Katrina Verey — Professional profile: biomedical science, software development, and linguistic services."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png" />
+    <style>
+      :root {
+        --bg: #0b0f14;
+        --text: #e9eef4;
+        --muted: #a9b4c0;
+        --brand-1: #8bd3dd;
+        --brand-2: #e2b669;
+        --brand-3: #9ad29a;
+        --hairline: rgba(255, 255, 255, 0.12);
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+        --maxw: 1120px;
+        --header-h: 76px;
+        --col-gap: 28px;
+        --media-w: 420px;
+        --timeline-w: 4px;
+        --rail-left: 96px;
+      }
+      :root {
+        --stickyTop: calc(var(--header-h) + 20px);
+      }
+      [data-theme='light'] {
+        --bg: #e6eaef;
+        --text: #1a2233;
+        --muted: #5f6b77;
+        --hairline: rgba(16, 30, 54, 0.12);
+        --shadow: 0 18px 50px rgba(16, 30, 54, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html.preload body {
+        opacity: 0;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        scroll-snap-type: y proximity;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid rgba(139, 211, 221, 0.55);
+        outline-offset: 3px;
+        border-radius: 10px;
+      }
+
+      /* Fixed header */
+      .header {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(8px);
+        background: color-mix(in oklab, var(--bg) 88%, transparent);
+        border-bottom: 1px solid transparent;
+        transition:
+          background 0.25s ease,
+          border-color 0.25s ease;
+      }
+      .header.scrolled {
+        border-bottom-color: var(--hairline);
+        background: color-mix(in oklab, var(--bg) 92%, transparent);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+      }
+      .head-inner {
+        height: var(--header-h);
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 10px 20px;
+      }
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--hairline);
+        background: #5a6b78;
+      }
+      [data-theme='light'] .avatar {
+        background: #e9eef5;
+      }
+      .name {
+        font-weight: 800;
+        letter-spacing: 0.2px;
+        font-size: 18px;
+        margin: 0;
+        white-space: nowrap;
+      }
+      .tag {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .socials {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .socials a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--hairline);
+      }
+      .socials a:hover {
+        background: color-mix(in oklab, var(--bg) 84%, transparent);
+      }
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--hairline);
+        cursor: pointer;
+        position: relative;
+        transition:
+          background 0.2s ease,
+          box-shadow 0.2s ease,
+          transform 0.06s ease;
+        color: var(--text);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      }
+      [data-theme='light'] .theme-toggle {
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(16, 30, 54, 0.12);
+      }
+      .theme-toggle:hover {
+        transform: translateY(-1px);
+      }
+      .theme-toggle .icon {
+        display: none;
+      }
+      [data-theme='light'] .theme-toggle .sun {
+        display: block;
+      }
+      [data-theme='dark'] .theme-toggle .moon {
+        display: block;
+      }
+
+      /* Page layout with scroll snap */
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: calc(var(--header-h) + 28px) 20px 80px calc(20px + var(--rail-left));
+        position: relative;
+      }
+      .section {
+        scroll-snap-align: center;
+        min-height: calc(100vh - var(--header-h));
+        display: grid;
+        grid-template-columns: 1fr var(--col-gap) var(--media-w);
+        align-items: center;
+        gap: 0;
+        padding: 40px 0;
+        scroll-snap-stop: always;
+      }
+      .section:first-of-type {
+        scroll-snap-align: none;
+      }
+      .section:last-of-type {
+        scroll-snap-align: none;
+      }
+      .section + .section {
+        border-top: 1px solid var(--hairline);
+      }
+
+      .col-text {
+        padding-right: 8px;
+      }
+      .col-text h2 {
+        font-family: Georgia, serif;
+        font-size: 28px;
+        margin: 0 0 10px;
+      }
+      .col-text p {
+        color: var(--muted);
+        line-height: 1.75;
+        margin: 0 0 10px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .chip {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--hairline);
+        background: color-mix(in oklab, var(--bg) 90%, transparent);
+      }
+
+      .col-media {
+        display: flex;
+        justify-content: center;
+      }
+      .media-frame {
+        width: 100%;
+      }
+      .media-card {
+        width: 100%;
+        height: 320px;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background-size: cover;
+        background-position: center;
+        background-image:
+          radial-gradient(80% 80% at 50% 40%, rgba(255, 255, 255, 0.06), transparent 65%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.12));
+      }
+      [data-theme='light'] .media-card {
+        background-image:
+          radial-gradient(
+            80% 80% at 50% 40%,
+            rgba(255, 255, 255, 0.95),
+            rgba(255, 255, 255, 0.6) 65%
+          ),
+          linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(230, 234, 239, 1));
+      }
+
+      /* Timeline rail (fixed) + line + cell */
+      .timeline {
+        position: fixed;
+        left: var(--rail-left);
+        right: auto;
+        top: calc(var(--header-h) + 16px);
+        bottom: 16px;
+        width: var(--timeline-w);
+        z-index: 0;
+        border-radius: 2px;
+        background: transparent;
+      }
+      .timeline .base {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        top: 0;
+        height: 0;
+        border-radius: 2px;
+        background: linear-gradient(
+          180deg,
+          color-mix(in oklab, var(--bg) 75%, transparent),
+          color-mix(in oklab, var(--bg) 60%, transparent)
+        );
+        z-index: 0;
+      }
+      .tick-label {
+        position: absolute;
+        right: 22px;
+        left: auto;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: var(--muted);
+        text-align: right;
+      }
+      .timeline .progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 0;
+        background: linear-gradient(
+          180deg,
+          var(--brand-1),
+          color-mix(in oklab, var(--brand-1) 30%, transparent)
+        );
+        border-radius: 2px;
+        box-shadow: 0 0 12px color-mix(in oklab, var(--brand-1) 40%, transparent);
+        z-index: 1;
+      }
+      .timeline .cell-svg {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
+        z-index: 3;
+        color: var(--brand-1);
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25))
+          drop-shadow(0 0 3px color-mix(in oklab, var(--brand-1) 25%, transparent));
+      }
+      .timeline .cell-svg path {
+        stroke: color-mix(in oklab, var(--brand-1) 70%, #000);
+        stroke-width: 2.5;
+        stroke-opacity: 0.8;
+      }
+      .timeline .cell-svg circle {
+        fill: #fff;
+        fill-opacity: 0.92;
+      }
+      .timeline .cell-svg .cell-bg {
+        fill: var(--bg);
+      }
+      /* organelles */
+      .timeline .cell-svg .nucleus {
+        fill: #fff;
+        fill-opacity: 0.95;
+        stroke: color-mix(in oklab, var(--brand-1) 65%, #000);
+        stroke-width: 1.4;
+      }
+      .timeline .cell-svg .nucleolus {
+        fill: #fff;
+        fill-opacity: 0.85;
+      }
+      .timeline .cell-svg .org {
+        fill: rgba(255, 255, 255, 0.16);
+        stroke: color-mix(in oklab, var(--brand-1) 70%, #000);
+        stroke-width: 1.1;
+      }
+      .timeline .cell-svg .org.thin {
+        stroke-width: 0.9;
+      }
+      .timeline .cell-svg .cristae {
+        fill: none;
+        stroke: #fff;
+        stroke-opacity: 0.85;
+        stroke-width: 0.8;
+      }
+      .timeline .cell-svg .ves {
+        fill: #fff;
+        fill-opacity: 0.9;
+        stroke: color-mix(in oklab, var(--brand-1) 60%, #000);
+        stroke-width: 0.7;
+      }
+      .timeline .cell-svg .micro {
+        fill: none;
+        stroke: color-mix(in oklab, var(--brand-1) 65%, #000);
+        stroke-width: 1;
+        stroke-linecap: round;
+        stroke-opacity: 0.9;
+      }
+      .timeline .cell-svg.pulse {
+        animation: cellPulse 6s ease-in-out infinite;
+      }
+      @keyframes cellPulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.08);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .timeline .cell-svg {
+          animation: none;
+        }
+      }
+      .tick {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--hairline);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        z-index: 2;
+      }
+      .tick.active {
+        border-color: var(--brand-1);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-1) 25%, transparent);
+      }
+      .tick,
+      .tick-label {
+        cursor: pointer;
+      }
+      .tick-label {
+        user-select: none;
+      }
+
+      /* Biomed scrollytelling inside one section (3-beat) */
+      .section.biomed {
+        min-height: calc((100vh - var(--header-h)) * 4);
+        align-items: start;
+      }
+      .section.biomed .col-text {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+      .section.biomed .col-media {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+
+      /* Software scrollytelling + video embed */
+      .section.software {
+        min-height: calc((100vh - var(--header-h)) * 2);
+        align-items: start;
+      }
+      .section.software .col-text {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+      .section.software .col-media {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+      .media-embed {
+        width: 100%;
+        height: 320px;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: none;
+        background: #000;
+        pointer-events: auto;
+      }
+      .media-embed.active {
+        display: block;
+      }
+      .media-embed iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .media-card.hidden {
+        display: none;
+      }
+
+      /* Linguistics consistent behavior */
+      .section.linguistics {
+        min-height: calc((100vh - var(--header-h)) * 2);
+        align-items: start;
+      }
+      .section.linguistics .col-text {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+      .section.linguistics .col-media {
+        position: sticky;
+        top: var(--stickyTop);
+      }
+
+      /* Mobile */
+      @media (max-width: 980px) {
+        .wrap {
+          padding: calc(var(--header-h) + 18px) 16px 64px 16px;
+        }
+        .section {
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+        .timeline {
+          left: 12px;
+          right: auto;
+        }
+        .media-card {
+          height: 240px;
+        }
+        .media-embed {
+          height: 240px;
+        }
+        .section.biomed {
+          min-height: calc((100vh - var(--header-h)) * 4);
+        }
+        .section.biomed .col-text,
+        .section.biomed .col-media {
+          top: calc(var(--header-h) + 12px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      /* Custom video thumbnail overlay for software video */
+      .video-thumb {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        z-index: 2;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .video-thumb.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .video-thumb::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.35);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+      .video-thumb::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-40%, -50%);
+        width: 0;
+        height: 0;
+        border-left: 26px solid #fff;
+        border-top: 16px solid transparent;
+        border-bottom: 16px solid transparent;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header" role="banner">
+      <div class="head-inner">
+        <div class="identity">
+          <img class="avatar" src="./images/cumulus-cat.png" alt="Katrina avatar" />
+          <div>
+            <h1 class="name">Katrina Verey</h1>
+            <p class="tag">Bridging science, software, and language.</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <nav class="socials" aria-label="Social links">
+            <a
+              href="https://linkedin.com/in/knverey"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.18h.05c.53-1 1.83-2.18 3.77-2.18 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.8c0-1.86-.03-4.26-2.6-4.26-2.6 0-3 2.03-3 4.12V24h-4V8z"
+                />
+              </svg>
+            </a>
+            <a href="https://github.com/KnVerey" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 .5C5.73.5.9 5.33.9 11.6c0 4.87 3.16 9 7.55 10.45.55.1.75-.24.75-.54v-1.9c-3.07.67-3.72-1.3-3.72-1.3-.5-1.27-1.22-1.6-1.22-1.6-.99-.68.08-.66.08-.66 1.1.08 1.69 1.13 1.69 1.13.98 1.68 2.57 1.2 3.2.92.1-.7.38-1.2.69-1.47-2.45-.28-5.03-1.22-5.03-5.42 0-1.2.43-2.18 1.14-2.96-.11-.28-.5-1.4.11-2.9 0 0 .95-.3 3.1 1.13.9-.25 1.86-.38 2.82-.38.95 0 1.92.13 2.82.38 2.15-1.44 3.1-1.13 3.1-1.13.61 1.5.22 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.22-2.59 5.14-5.06 5.41.39.34.73 1 .73 2.02v2.99c0 .3.2.64.76.54 4.38-1.46 7.54-5.58 7.54-10.45C23.1 5.33 18.27.5 12 .5z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://instagram.com/microcosmonaut.kat"
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm6.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"
+                />
+              </svg>
+            </a>
+          </nav>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle theme"
+            aria-pressed="false"
+            title="Toggle theme"
+          >
+            <span class="icon sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path
+                  fill="currentColor"
+                  d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.41-1.41-1.8 1.79zM17.66 6.34l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 18a6 6 0 100-12 6 6 0 000 12zm0 4h-0.01H12z"
+                />
+              </svg>
+            </span>
+            <span class="icon moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap" id="main">
+      <!-- Timeline rail (with progress & cell) -->
+      <div class="timeline" id="timeline" aria-hidden="true">
+        <div class="progress" id="tlProgress"></div>
+        <!-- SVG cell with organelles -->
+        <svg
+          id="tlCell"
+          class="cell-svg"
+          width="30"
+          height="30"
+          viewBox="0 0 100 100"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <defs>
+            <radialGradient id="cellCyt" cx="50%" cy="45%" r="60%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.92" />
+              <stop offset="65%" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="100%" stop-color="currentColor" stop-opacity="0.18" />
+            </radialGradient>
+            <!-- Amoeboid wobble -->
+            <filter id="amoeba" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.012"
+                numOctaves="2"
+                seed="8"
+                result="noise"
+              >
+                <animate
+                  attributeName="baseFrequency"
+                  values="0.012;0.018;0.012"
+                  dur="14s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="seed"
+                  values="8;12;10;8"
+                  dur="28s"
+                  repeatCount="indefinite"
+                />
+              </feTurbulence>
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="2.4"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              >
+                <animate
+                  attributeName="scale"
+                  values="1.6;3;1.6"
+                  dur="10s"
+                  repeatCount="indefinite"
+                />
+              </feDisplacementMap>
+            </filter>
+          </defs>
+          <circle class="cell-bg" cx="50" cy="50" r="36"></circle>
+          <g filter="url(#amoeba)">
+            <!-- irregular membrane (outer contour) -->
+            <path
+              class="membrane"
+              d="M50,6
+             C64,4 83,14 92,29
+             C99,41 98,60 90,74
+             C82,87 64,96 46,95
+             C32,94 17,86 11,70
+             C6,57 8,40 18,27
+             C26,18 36,9 50,6
+             C56,8 60,10 66,12
+             C72,14 78,18 82,24
+             C86,30 88,36 88,42
+             C88,50 86,56 82,62
+             C78,68 72,73 64,77
+             C58,80 52,82 46,82
+             C38,82 32,79 26,75
+             C20,71 16,66 13,60
+             C10,54 9,48 10,42
+             C11,36 14,30 19,25
+             C24,20 30,16 36,13
+             C42,10 46,8 50,6 Z"
+              fill="url(#cellCyt)"
+              stroke="currentColor"
+              stroke-opacity="0.55"
+              stroke-width="2.2"
+            />
+
+            <!-- nucleus + nucleolus -->
+            <circle class="nucleus" cx="60" cy="42" r="11" />
+            <circle class="nucleolus" cx="63.5" cy="39.5" r="3.2" />
+
+            <!-- mitochondrion (bean) with cristae -->
+            <g class="mito" transform="translate(28,58) rotate(-18)">
+              <path
+                class="org"
+                d="M0,6 C0,1.8 3.5,0 8,0 C13,0 18,2.5 18,6 C18,9.5 13,12 8,12 C3.5,12 0,10.2 0,6 Z"
+              />
+              <path class="cristae" d="M2.5,4.5 C5,6 7,3.5 9.5,5.2 C12,7 14,4.2 16,5.5" />
+              <path class="cristae" d="M2.5,7.5 C5,9 7,6.5 9.5,8.2 C12,10 14,7.2 16,8.5" />
+            </g>
+
+            <!-- Golgi (stacked curves) -->
+            <g class="golgi" transform="translate(34,30)">
+              <path class="org thin" d="M0,10 C6,6 14,6 22,9" />
+              <path class="org" d="M-1,13 C6,9 15,9 23,12" />
+              <path class="org thin" d="M1,16 C7,12 14,12 21,15" />
+            </g>
+
+            <!-- vesicles -->
+            <g class="vesicles">
+              <circle class="ves" cx="36" cy="41" r="2.2" />
+              <circle class="ves" cx="44" cy="67" r="2.6" />
+              <circle class="ves" cx="70" cy="66" r="2.0" />
+              <circle class="ves" cx="75" cy="52" r="1.8" />
+            </g>
+
+            <!-- microtubule curve -->
+            <path class="micro" d="M24,46 C32,50 40,54 48,50 C56,46 64,50 72,54" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Biomedical (3-beat scrollytelling within section) -->
+      <section class="section biomed" id="biomed">
+        <div class="col-text">
+          <h2>Biomedical Science</h2>
+          <p>
+            I’m pursuing a six-year integrated Honours BSc in Translational and Molecular Medicine
+            and a PhD in Cellular and Molecular Medicine at the University of Ottawa. My interests
+            include tumour evolution and spatial transcriptomics.
+          </p>
+          <div class="chips" aria-label="Selected highlights">
+            <span class="chip">Dean’s Honour List · Fall 2024</span>
+            <span class="chip">R for biostats</span>
+            <span class="chip">Foundational chem & bio labs</span>
+            <span class="chip">Microscopy & illumination</span>
+          </div>
+        </div>
+        <div></div>
+        <aside class="col-media">
+          <div class="media-frame">
+            <div class="media-card" id="bioCard" role="img" aria-label="Microscopy image"></div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Software -->
+      <section class="section software" id="software">
+        <div class="col-text">
+          <h2>Software Development</h2>
+          <p>
+            Nearly a decade of engineering and technical leadership focused on large-scale
+            distributed systems and open-source collaboration: Kubernetes platform work, developer
+            experience, incident response, and conference speaking.
+          </p>
+          <div class="chips">
+            <span class="chip">Tech Lead · SIG CLI</span>
+            <span class="chip">KubeCon speaker</span>
+            <span class="chip">Open-source maintainer</span>
+            <span class="chip">Platform UX</span>
+          </div>
+        </div>
+        <div></div>
+        <aside class="col-media">
+          <div class="media-frame">
+            <div class="media-card" id="softCard"></div>
+            <div
+              class="media-embed"
+              id="softVideo"
+              aria-label="KubeCon talk video"
+              style="position: relative"
+            >
+              <!-- Video thumbnail overlay, initially visible before iframe is activated -->
+              <div
+                class="video-thumb"
+                id="softVideoThumb"
+                role="button"
+                aria-label="Play talks playlist"
+                tabindex="0"
+                style="background-image: url('./images/software-playlist-thumb.png')"
+              ></div>
+              <iframe
+                id="softIframe"
+                width="100%"
+                height="100%"
+                title="KubeCon talk"
+                src=""
+                loading="lazy"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Linguistics -->
+      <section class="section linguistics" id="linguistics">
+        <div class="col-text">
+          <h2>Linguistic Services</h2>
+          <p>
+            Early career in translation and editorial roles in Canada’s public sector and
+            humanitarian contexts—training in clarity, precision, and policy-aware communication
+            that still shapes my scientific writing.
+          </p>
+          <div class="chips">
+            <span class="chip">IRB Award of Excellence</span>
+            <span class="chip">French→English translation</span>
+            <span class="chip">Plain language editing</span>
+            <span class="chip">Terminology & tooling</span>
+          </div>
+        </div>
+        <div></div>
+        <aside class="col-media">
+          <div class="media-card" id="langCard"></div>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      // ---------- Assets ----------
+      const IMAGES = {
+        banners: { software: './images/software.png', linguistics: './images/language.png' },
+        galleryDark: Array.from({ length: 12 }, (_, i) => ({
+          src: `./images/micro${i + 1}.jpg`,
+          alt: `Microscopy image ${i + 1}`,
+        })),
+        galleryLight: Array.from({ length: 12 }, (_, i) => ({
+          src: `./images/micro${i + 1}-light.jpg`,
+          alt: `Microscopy image ${i + 1} light`,
+        })),
+      };
+      const pickN = (arr, n) => {
+        let a = [];
+        try {
+          if (Array.isArray(arr)) a = arr.slice();
+          else if (arr && typeof arr[Symbol.iterator] === 'function') {
+            for (const it of arr) a.push(it);
+          } else if (
+            arr &&
+            typeof arr.length === 'number' &&
+            isFinite(arr.length) &&
+            arr.length >= 0
+          )
+            a = Array.prototype.slice.call(arr);
+        } catch {
+          a = [];
+        }
+        const count = Math.max(0, Math.min(a.length, Number.isFinite(n) ? Math.floor(n) : 0));
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a.slice(0, count);
+      };
+
+      // ---------- Header divider on scroll ----------
+      (function () {
+        const header = document.querySelector('.header');
+        const onScroll = () => header.classList.toggle('scrolled', (window.scrollY || 0) > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+
+      // ---------- Theme toggle (default to system; persist) ----------
+      let bioSet = []; // 3 images for current theme
+      let pathProgress = 0; // 0..1 from Biomed start to Software center
+      (function () {
+        const root = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const saved = localStorage.getItem('theme');
+        const prefersLight =
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const initial = saved || (prefersLight ? 'light' : 'dark');
+        function setTheme(t) {
+          root.setAttribute('data-theme', t);
+          btn && btn.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
+          localStorage.setItem('theme', t);
+          chooseBiomedSet(); // pick 3 new images for this theme
+          showBiomedFrame(0, true); // show first immediately
+        }
+        btn &&
+          btn.addEventListener('click', () => {
+            const current = root.getAttribute('data-theme') || 'dark';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+          });
+        setTheme(initial);
+      })();
+
+      // ---------- Set banners ----------
+      (function () {
+        const soft = document.getElementById('softCard');
+        const lang = document.getElementById('langCard');
+        if (soft) soft.style.backgroundImage = `url(${IMAGES.banners.software})`;
+        if (lang) lang.style.backgroundImage = `url(${IMAGES.banners.linguistics})`;
+      })();
+
+      // ---------- Biomed 3-beat scrollytelling ----------
+      function chooseBiomedSet() {
+        const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const pool = theme === 'light' ? IMAGES.galleryLight : IMAGES.galleryDark;
+        if (!Array.isArray(pool) || pool.length === 0) {
+          console.error('[biomed] image pool is empty');
+          bioSet = [];
+          return;
+        }
+        bioSet = pickN(pool, 3);
+      }
+      function preloadTry(urls, onSuccess, onFail) {
+        if (!urls || !urls.length) {
+          onFail && onFail();
+          return;
+        }
+        const [url, ...rest] = urls;
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = () => onSuccess && onSuccess(url);
+        img.onerror = () => preloadTry(rest, onSuccess, onFail);
+        img.src = url;
+      }
+      function showBiomedFrame(i, instant = false) {
+        const card = document.getElementById('bioCard');
+        if (!card || !bioSet[i]) return;
+        const base = bioSet[i].src;
+
+        const cands = new Set();
+        const add = (u) => {
+          if (u) cands.add(u);
+        };
+        function addExtPair(stem, ext) {
+          const lower = (ext || 'jpg').toLowerCase();
+          add(`${stem}.${lower}`);
+          add(`${stem}.${lower === 'jpg' ? 'png' : 'jpg'}`);
+        }
+        const m = base.match(/^(.*\/micro)(\d+)(-light)?\.(jpg|jpeg|png)$/i);
+        if (m) {
+          const [, pre, num, light, ext] = m;
+          const n = parseInt(num, 10);
+          const suffix = light || '';
+          addExtPair(`${pre}${n}${suffix}`, ext);
+          if (n < 10 && num.length === 1) {
+            addExtPair(`${pre}0${n}${suffix}`, ext);
+          }
+        } else {
+          add(base);
+          if (/\.jpg$/i.test(base)) add(base.replace(/\.jpg$/i, '.png'));
+          if (/\.png$/i.test(base)) add(base.replace(/\.png$/i, '.jpg'));
+        }
+
+        const list = Array.from(cands);
+        preloadTry(
+          list,
+          (goodUrl) => {
+            card.style.backgroundImage = `url(${goodUrl})`;
+            card.setAttribute('aria-label', bioSet[i].alt || 'Microscopy image');
+            if (!instant) {
+              card.style.transition = 'filter .35s ease';
+              card.style.filter = 'opacity(0.88)';
+              requestAnimationFrame(() => {
+                card.style.filter = 'opacity(1)';
+              });
+            }
+          },
+          () => {
+            console.warn('Microscopy image failed to load for frame', i, 'tried:', list);
+            card.style.backgroundImage = '';
+          }
+        );
+      }
+
+      chooseBiomedSet();
+      showBiomedFrame(0, true);
+
+      (function () {
+        const section = document.getElementById('biomed');
+        if (!section) return;
+        function onScroll() {
+          const vh = window.innerHeight;
+          const bio = document.getElementById('biomed');
+          const soft = document.getElementById('software');
+          if (!bio || !soft) return;
+
+          // Viewport center in document space
+          const yCenter = (window.scrollY || 0) + vh / 2;
+
+          // Map Biomed start → Software center into 0..1
+          const bioStart = bio.offsetTop;
+          const softCenter = soft.offsetTop + soft.offsetHeight / 2;
+          const denom = Math.max(1, softCenter - bioStart);
+          const t = Math.max(0, Math.min(1, (yCenter - bioStart) / denom));
+          const t0 = (window.scrollY || 0) < 2 ? 0 : t;
+          pathProgress = t0;
+
+          // Four equal beats: 0..0.25, 0.25..0.5, 0.5..0.75, 0.75..1
+          const frame = Math.min(2, Math.floor(t0 * 4));
+          showBiomedFrame(frame);
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+      })();
+
+      // ---------- Software scrollytelling (with hysteresis + persistent iframe src) ----------
+      (function () {
+        const section = document.getElementById('software');
+        if (!section) return;
+        const softCard = document.getElementById('softCard');
+        const softVideo = document.getElementById('softVideo');
+        const softIframe = document.getElementById('softIframe');
+        const softThumb = document.getElementById('softVideoThumb');
+        const PLAYLIST_ID = 'PLbQ4eioQT6QPBat3jZPcdUfHmE18bVGFg';
+        const YT_SRC =
+          'https://www.youtube-nocookie.com/embed/videoseries' +
+          '?list=' +
+          PLAYLIST_ID +
+          '&listType=playlist&rel=0&modestbranding=1&autohide=1&playsinline=1&enablejsapi=1&controls=1' +
+          '&origin=' +
+          encodeURIComponent(location.origin);
+
+        let lastFrame = -1;
+        let iframeLoaded = false;
+        let thumbActive = false;
+
+        function showSoftFrame(i) {
+          if (i === 0) {
+            // show image card, hide video (do NOT clear iframe src to avoid reload/bounce)
+            if (softCard) softCard.classList.remove('hidden');
+            if (softVideo) softVideo.classList.remove('active');
+            // Hide thumbnail overlay and iframe (just in case)
+            if (softThumb) softThumb.classList.add('hidden');
+            if (softIframe) softIframe.style.visibility = 'hidden';
+            thumbActive = false;
+          } else {
+            // show video; thumbnail overlay visible, iframe hidden until click
+            if (softCard) softCard.classList.add('hidden');
+            if (softVideo) softVideo.classList.add('active');
+            if (softThumb) {
+              softThumb.classList.remove('hidden');
+              thumbActive = true;
+            }
+            if (softIframe) {
+              softIframe.style.visibility = 'hidden';
+              softIframe.tabIndex = 0;
+            }
+          }
+        }
+
+        // On click of thumbnail, show iframe and set src if needed
+        if (softThumb) {
+          softThumb.addEventListener('click', function (e) {
+            if (!thumbActive) return;
+            // Hide thumbnail
+            softThumb.classList.add('hidden');
+            // Show iframe and set src if not loaded
+            if (softIframe) {
+              if (!iframeLoaded) {
+                softIframe.src = YT_SRC;
+                iframeLoaded = true;
+              }
+              softIframe.style.visibility = 'visible';
+              softIframe.focus();
+            }
+            thumbActive = false;
+          });
+          // Keyboard activation (Enter/Space)
+          softThumb.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              softThumb.click();
+            }
+          });
+        }
+
+        function onScroll() {
+          const vh = window.innerHeight;
+          const yCenter = (window.scrollY || 0) + vh / 2;
+          const softStart = section.offsetTop;
+          const ling = document.getElementById('linguistics');
+          const lingCenter = ling ? ling.offsetTop + ling.offsetHeight / 2 : softStart + vh;
+          const denom = Math.max(1, lingCenter - softStart);
+          const t = Math.max(0, Math.min(1, (yCenter - softStart) / denom));
+
+          // Hysteresis to avoid flicker/jump: switch to video only past 0.5, back to image only below 0.5
+          let frame;
+          if (lastFrame <= 0) frame = t > 0.3 ? 1 : 0;
+          else frame = t < 0.28 ? 0 : 1;
+
+          if (frame !== lastFrame) {
+            showSoftFrame(frame);
+            lastFrame = frame;
+          }
+        }
+
+        // On first load, ensure iframe is hidden and thumb is visible if in video mode
+        function initialState() {
+          const softVideoActive = softVideo && softVideo.classList.contains('active');
+          if (softVideoActive && softThumb && thumbActive) {
+            softThumb.classList.remove('hidden');
+            if (softIframe) softIframe.style.visibility = 'hidden';
+          } else {
+            if (softThumb) softThumb.classList.add('hidden');
+            if (softIframe) softIframe.style.visibility = 'hidden';
+          }
+        }
+
+        onScroll();
+        initialState();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+      })();
+
+      // Center the first (biomed) section by adjusting sticky offset (no scroll jump)
+      (function () {
+        const first = document.getElementById('biomed');
+        if (!first) return;
+        function computeStickyTop() {
+          const root = document.documentElement;
+          const headerH = parseInt(getComputedStyle(root).getPropertyValue('--header-h')) || 76;
+          const mediaH = 320;
+          const ideal = (window.innerHeight - mediaH) / 2;
+          const minTop = headerH + 12;
+          const top = Math.max(minTop, Math.round(ideal));
+          root.style.setProperty('--stickyTop', top + 'px');
+        }
+        computeStickyTop();
+        window.addEventListener('resize', computeStickyTop);
+        document.documentElement.classList.remove('preload');
+      })();
+
+      // ---------- Timeline ticks + progress + crawling cell ----------
+      (function () {
+        const rail = document.getElementById('timeline');
+        const prog = document.getElementById('tlProgress');
+        const cell = document.getElementById('tlCell');
+        const sections = Array.from(document.querySelectorAll('.section'));
+        const count = sections.length;
+
+        // Create base line element
+        const base = document.createElement('div');
+        base.className = 'base';
+        rail.appendChild(base);
+
+        // Build ticks at fixed percentages (10%..90%)
+        const ticks = [];
+        const tickPercents = [];
+        const labels = [];
+        for (let i = 0; i < count; i++) {
+          const t = document.createElement('div');
+          t.className = 'tick';
+          const p = 10 + 80 * (i / (count - 1 || 1));
+          t.dataset.percent = p;
+          t.style.top = `${p}%`;
+          rail.appendChild(t);
+          const label = document.createElement('div');
+          label.className = 'tick-label';
+          label.textContent = i === 0 ? 'Present' : i === 1 ? '2014–2023' : '2008–2014';
+          label.style.top = `${p}%`;
+          rail.appendChild(label);
+          labels.push(label);
+          ticks.push(t);
+          tickPercents.push(p);
+        }
+
+        function getTickPixels() {
+          const rect = rail.getBoundingClientRect();
+          const pixels = tickPercents.map((p) => rect.height * (p / 100));
+          if (pixels.length) {
+            base.style.top = pixels[0] + 'px';
+            base.style.height = rect.height - pixels[0] + 'px';
+            prog.style.top = pixels[0] + 'px';
+          }
+          return pixels;
+        }
+
+        // Section centers in document space
+        let centersPx = [];
+        function recomputeCenters() {
+          centersPx = sections.map((sec) => sec.offsetTop + sec.offsetHeight / 2);
+        }
+
+        // ---- Timeline nav helper and binding ----
+        function scrollToSection(idx) {
+          // Ensure we have current centers
+          recomputeCenters();
+          let target;
+          if (idx === 0) {
+            // Biomed: jump to the start so the first image is centered and the cell sits in the first tick
+            const bio = sections[0];
+            const bioStart = bio ? bio.offsetTop : 0;
+            target = Math.max(0, Math.round(bioStart - window.innerHeight / 2));
+          } else if (idx === 1) {
+            // Software: jump to the first point where Software is centered
+            const soft = sections[1];
+            const softCenter = soft ? soft.offsetTop + soft.offsetHeight / 2 : centersPx[1];
+            const targetRaw = softCenter - window.innerHeight / 2;
+            // Nudge forward by 1px to avoid landing a hair before the dot due to subpixel rounding
+            const target = Math.max(0, Math.round(targetRaw + 1));
+            window.scrollTo({ top: target, behavior: 'smooth' });
+            return;
+          } else {
+            // Other sections: jump so that the section is centered
+            target = Math.max(0, Math.round(centersPx[idx] - window.innerHeight / 2));
+          }
+          window.scrollTo({ top: target, behavior: 'smooth' });
+        }
+
+        // Make ticks and labels interactive (click/keyboard)
+        function bindTimelineNav() {
+          ticks.forEach((t, idx) => {
+            const name = sections[idx]?.querySelector('h2')?.textContent || `Section ${idx + 1}`;
+            t.setAttribute('role', 'button');
+            t.setAttribute('tabindex', '0');
+            t.setAttribute('aria-label', `Jump to ${name}`);
+            t.addEventListener('click', () => scrollToSection(idx));
+            t.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                scrollToSection(idx);
+              }
+            });
+          });
+          labels.forEach((lbl, idx) => {
+            const name = sections[idx]?.querySelector('h2')?.textContent || `Section ${idx + 1}`;
+            lbl.setAttribute('role', 'button');
+            lbl.setAttribute('tabindex', '0');
+            lbl.setAttribute('aria-label', `Jump to ${name}`);
+            lbl.addEventListener('click', () => scrollToSection(idx));
+            lbl.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                scrollToSection(idx);
+              }
+            });
+          });
+        }
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                const idx = sections.indexOf(e.target);
+                ticks.forEach((el, i) => el.classList.toggle('active', i === idx));
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        sections.forEach((s) => io.observe(s));
+
+        function onScroll() {
+          const yCenter = window.scrollY + window.innerHeight / 2;
+          let i = 0;
+          while (i < centersPx.length - 1 && yCenter > centersPx[i + 1]) i++;
+
+          const tickY = getTickPixels();
+          const firstTick = tickY[0];
+          const secondTick = tickY[1];
+          const lastTick = tickY[tickY.length - 1];
+
+          // Use the same center math as sections so the cell hits Software exactly when Software centers
+          const soft = document.getElementById('software');
+          const ling = document.getElementById('linguistics');
+          const softCenter = soft ? soft.offsetTop + soft.offsetHeight / 2 : centersPx[1];
+          const lingCenter = ling ? ling.offsetTop + ling.offsetHeight / 2 : centersPx[2];
+
+          let pos;
+          if (yCenter <= softCenter) {
+            const t = Math.max(0, Math.min(1, pathProgress || 0));
+            pos = firstTick + (secondTick - firstTick) * t;
+          } else if (yCenter >= lingCenter) {
+            pos = lastTick;
+          } else {
+            const t = (yCenter - softCenter) / Math.max(1, lingCenter - softCenter);
+            pos = secondTick + (lastTick - secondTick) * Math.max(0, Math.min(1, t));
+          }
+          pos = Math.max(firstTick, Math.min(lastTick, pos)); // clamp
+
+          const nudge = 1;
+          prog.style.height = Math.round(pos + nudge) + 'px';
+          cell.style.top = Math.round(pos + nudge) + 'px';
+
+          // highlight nearest tick by proximity to centers
+          let activeIdx = 0;
+          let best = Infinity;
+          centersPx.forEach((c, idx) => {
+            const d = Math.abs(yCenter - c);
+            if (d < best) {
+              best = d;
+              activeIdx = idx;
+            }
+          });
+          ticks.forEach((el, i) => el.classList.toggle('active', i === activeIdx));
+        }
+
+        function onResize() {
+          recomputeCenters();
+          onScroll();
+        }
+
+        recomputeCenters();
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        setTimeout(() => {
+          recomputeCenters();
+          onScroll();
+        }, 200);
+        cell && cell.classList.add('pulse');
+        bindTimelineNav();
+      })();
+
+      // ---------- Keyboard snap assist ----------
+      (function () {
+        const sections = Array.from(document.querySelectorAll('.section'));
+        function snapTo(i) {
+          i = Math.max(0, Math.min(sections.length - 1, i));
+          sections[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        let index = 0;
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                index = sections.indexOf(e.target);
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        sections.forEach((s) => io.observe(s));
+        window.addEventListener('keydown', (e) => {
+          if (['PageDown', 'ArrowDown'].includes(e.key)) {
+            e.preventDefault();
+            snapTo(index + 1);
+          }
+          if (['PageUp', 'ArrowUp'].includes(e.key)) {
+            e.preventDefault();
+            snapTo(index - 1);
+          }
+          if (e.key === 'Home') {
+            e.preventDefault();
+            snapTo(0);
+          }
+          if (e.key === 'End') {
+            e.preventDefault();
+            snapTo(sections.length - 1);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

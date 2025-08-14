@@ -1,0 +1,24 @@
+# dependencies & build output
+node_modules
+dist
+build
+coverage
+
+# playwright artifacts
+playwright-report
+test-results
+
+# VCS / editor
+.git
+.vscode
+
+# assets
+images/**
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# generated or minified
+*.min.js

@@ -1,745 +1,1172 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Katrina Verey — kats.cloud</title>
-  <meta name="description" content="Katrina Verey's personal website" />
-  <!-- UX polish: let browsers know we support both color schemes, and set themed address-bar colors -->
-  <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d9dfe6">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Katrina Verey — kats.cloud</title>
+    <meta name="description" content="Katrina Verey's personal website" />
+    <!-- UX polish: let browsers know we support both color schemes, and set themed address-bar colors -->
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d9dfe6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14" />
 
-  <!-- Social cards -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Katrina Verey — kats.cloud">
-  <meta property="og:description" content="Katrina Verey's personal website">
-  <meta property="og:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg">
-  <meta property="og:url" content="https://kats.cloud/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Katrina Verey — kats.cloud">
-  <meta name="twitter:description" content="Katrina Verey's personal website">
-  <meta name="twitter:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg">
-  <link rel="canonical" href="https://kats.cloud/">
+    <!-- Social cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Katrina Verey — kats.cloud" />
+    <meta property="og:description" content="Katrina Verey's personal website" />
+    <meta property="og:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg" />
+    <meta property="og:url" content="https://kats.cloud/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Katrina Verey — kats.cloud" />
+    <meta name="twitter:description" content="Katrina Verey's personal website" />
+    <meta name="twitter:image" content="https://kats.cloud/images/cumulus-cat-cloud-outlined.jpg" />
+    <link rel="canonical" href="https://kats.cloud/" />
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Katrina Verey",
-    "url": "https://kats.cloud/",
-    "image": "https://kats.cloud/images/knverey.jpg",
-    "sameAs": [
-      "https://www.linkedin.com/in/knverey",
-      "https://github.com/KnVerey",
-      "https://www.instagram.com/microcosmonaut.kat"
-    ],
-    "jobTitle": "Student, Translational & Molecular Medicine / Cellular & Molecular Medicine",
-    "disambiguatingDescription": "Former software engineer at Shopify and Apple; now focused on biomedical research.",
-    "affiliation": [
+    <script type="application/ld+json">
       {
-        "@type": "Organization",
-        "name": "University of Ottawa",
-        "url": "https://www.uottawa.ca/"
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Katrina Verey",
+        "url": "https://kats.cloud/",
+        "image": "https://kats.cloud/images/knverey.jpg",
+        "sameAs": [
+          "https://www.linkedin.com/in/knverey",
+          "https://github.com/KnVerey",
+          "https://www.instagram.com/microcosmonaut.kat"
+        ],
+        "jobTitle": "Student, Translational & Molecular Medicine / Cellular & Molecular Medicine",
+        "disambiguatingDescription": "Former software engineer at Shopify and Apple; now focused on biomedical research.",
+        "affiliation": [
+          {
+            "@type": "Organization",
+            "name": "University of Ottawa",
+            "url": "https://www.uottawa.ca/"
+          }
+        ]
       }
-    ]
-  }
-  </script>
-  <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      /* theme palettes */
-      --accent-1: #2f5e82;
-      --accent-2: #6ea6c8;
-      --accent-3: #4b7ea8;
-      --bg: #000;            /* dark base to avoid flash on background swap */
-      --text: #1a2233;
-      --muted: #6c7680;
-      --radius: 16px;
-      --max-width: 900px;
-      --shadow: 0 10px 40px rgba(30,40,60,0.12);
-      --tile-min: 140; /* px, used by JS */
-      --grid-gap: 10;  /* px, used by CSS & JS */
-      --card-bg: rgba(255,255,255,0.92);
-      --card-border: rgba(16,30,54,0.12);
-      --meta-bg: rgba(0,0,0,0.55);
-      --meta-text: #ffffff;
-    }
-
-    html[data-theme="light"] {
-      --bg: #d9dfe6;
-      --text: #152033;
-      --muted: #516070;
-      --card-bg: rgba(255,255,255,0.9);
-      --card-border: rgba(16,30,54,0.12);
-      --meta-bg: rgba(0,0,0,0.55);
-      --meta-text: #ffffff;
-    }
-    html[data-theme="dark"] {
-      --bg: #0b0f14;
-      --text: #e9eef4;
-      --muted: #a9b4c0;
-      --card-bg: rgba(20,26,34,0.9);
-      --card-border: rgba(255,255,255,0.08);
-      --meta-bg: rgba(255,255,255,0.08);
-      --meta-text: #e9eef4;
-    }
-
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif;color:var(--text);background:var(--bg)}
-
-    /* Fixed background layers that cross-fade */
-    .bg-layer{
-      position:fixed; top:0; left:0; right:0; bottom:0; z-index:0;
-      background-size:cover; background-position:center; background-repeat:no-repeat; background-attachment:fixed;
-      will-change:opacity; opacity:1;
-      transition: opacity 700ms cubic-bezier(.2,.7,.2,1);
-    }
-    .bg-layer.hidden{opacity:0}
-
-    /* Floating shell card */
-    .site{min-height:100dvh;display:grid;place-items:center;padding:6vh 18px; position:relative; z-index:1}
-    .shell{width:100%;max-width:var(--max-width);background:var(--card-bg);backdrop-filter:saturate(115%) blur(8px);-webkit-backdrop-filter:saturate(115%) blur(8px);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--card-border);overflow:hidden}
-    .shell{ transition: opacity .18s ease, transform .18s ease; }
-    .shell.peek-bg{ opacity:0; transform:scale(0.98); pointer-events:none; }
-    .head{padding:28px 22px 16px 22px;text-align:center; position: relative;}
-    .name{
-      font-family: "Ephesis", cursive;
-      font-size: clamp(36px, 7.2vw, 64px);
-      font-weight: 400; /* Ephesis has a single weight */
-      letter-spacing: 0.2px;
-      line-height: 1.05;
-      margin: 0 0 6px;
-      color: var(--accent-1);
-    }
-    .sub{font-size:15px;color:var(--muted);margin:0}
-
-    .disciplines-nav{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px 0 6px}
-    .disciplines-nav button{background:transparent;border:2px solid transparent;color:var(--accent-1);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14.5px;transition:background .18s,color .18s,border .18s}
-    .disciplines-nav button.active{background:var(--accent-1);color:#fff;border-color:var(--accent-2)}
-    .disciplines-nav button:focus-visible{outline:2px solid var(--accent-1); outline-offset:2px}
-    .disciplines-nav button:hover:not(.active){background:rgba(75,134,180,0.08);color:var(--accent-3)}
-
-    .theme-toggle{position:absolute; right:14px; top:14px; display:inline-flex; align-items:center; justify-content:center; width:38px; height:34px; border-radius:8px; border:1px solid rgba(0,0,0,.12); cursor:pointer; color:var(--text); box-shadow:0 6px 16px rgba(0,0,0,.18); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));}
-    html[data-theme="light"] .theme-toggle{background:#fff; box-shadow:0 6px 16px rgba(16,30,54,.12)}
-    .theme-toggle .icon{display:none}
-    html[data-theme="light"] .theme-toggle .sun{display:block}
-    html[data-theme="dark"] .theme-toggle .moon{display:block}
-    .theme-toggle:hover{transform:translateY(-1px)}
-
-    /* Expanding details */
-    .details{max-height:0;opacity:0;overflow:hidden;transition:max-height 560ms cubic-bezier(.2,.7,.2,1), opacity 460ms cubic-bezier(.2,.7,.2,1)}
-    .shell.open .details{opacity:1;max-height:1200px}
-    .details-inner{padding:0 22px 16px 22px; transition: opacity 380ms cubic-bezier(.2,.7,.2,1), transform 380ms cubic-bezier(.2,.7,.2,1)}
-    .section-title{font-family:Georgia,serif;font-size:22px;margin:0 0 8px;color:var(--accent-3)}
-    .copy{color:var(--muted);line-height:1.6;margin:0;font-size:15.5px}
-    .link{
-      display:inline-block; /* allow natural line wrapping and margin-top to take effect */
-      margin-top:20px;
-      margin-bottom:20px;
-      color:var(--text);
-      font-weight:600;
-      text-decoration-line: underline;
-      text-decoration-color: var(--muted);
-      text-decoration-thickness: 2px;
-      text-underline-offset: 4px;
-      text-decoration-skip-ink: auto;
-      overflow-wrap: anywhere; /* prevent overflow on narrow screens */
-    }
-    .link:hover{ color:var(--accent-1); text-decoration-color: var(--accent-1); }
-
-    /* Integrated footer strip */
-    .meta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;padding:12px 18px;background: var(--meta-bg); color: var(--meta-text);font-size:13.5px}
-    .meta a{color: var(--meta-text);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.35);padding-bottom:1px}
-    .meta a:hover{border-bottom-color:#fff}
-
-    .media-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: calc(var(--grid-gap) * 1px); margin:14px 0 8px; }
-    .media-grid img { width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow: var(--shadow); aspect-ratio: 1 / 1; }
-    .video-wrap{
-      position:relative; width:100%;
-      max-width: clamp(420px, 66%, 720px);
-      aspect-ratio: 16 / 9;
-      border-radius:14px; overflow:hidden; box-shadow: var(--shadow);
-      background:#000; margin:12px 0 0;
-      min-width: 320px;
-    }
-    .visually-hidden{ position:absolute!important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
-
-    .video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; z-index:1; }
-    .video-thumb{ position:absolute; inset:0; background-size:cover; background-position:center; cursor:pointer; z-index:2; }
-    .video-thumb.hidden{ display:none }
-    .video-thumb::before{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:64px; height:64px; border-radius:50%; background: rgba(0,0,0,.35);
-      box-shadow:0 6px 16px rgba(0,0,0,.25);
-    }
-    .video-thumb::after{
-      content:""; position:absolute; left:50%; top:50%; transform:translate(-38%,-50%);
-      width:0; height:0; border-left:26px solid #fff; border-top:16px solid transparent; border-bottom:16px solid transparent;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
-    }
-
-    @media (max-width:640px){
-      .head{padding:22px 16px 12px}
-      .details-inner{padding:0 16px 12px}
-      .disciplines-nav button{ padding:10px 14px; font-size:15px }
-      .disciplines-nav{ flex-wrap: wrap; gap:8px; padding:12px 8px 6px; }
-      .disciplines-nav button{ font-size:13.5px; padding:8px 10px; }
-    }
-
-    @media (max-width:480px){
-      .disciplines-nav{ flex-wrap: wrap; gap:6px; padding:10px 8px 6px; }
-      .disciplines-nav button{ font-size:13px; padding:8px 10px; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .bg-layer{ transition: none; }
-      .shell{ transition: none; }
-      .details{ transition: none; }
-      .details-inner{ transition: none; }
-    }
-  </style>
-</head>
-<body>
-  <!-- cross-fade background layers -->
-  <div id="bgA" class="bg-layer" aria-hidden="true"></div>
-  <div id="bgB" class="bg-layer hidden" aria-hidden="true"></div>
-  <span id="bgDesc" class="visually-hidden" aria-live="polite"></span>
-
-  <main class="site">
-    <noscript><p style="max-width:900px;margin:1rem auto;text-align:center;color:var(--muted)">This page uses a small amount of JavaScript to display content. Please enable JavaScript to view the details.</p></noscript>
-    <section class="shell open" id="shell">
-      <header class="head">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
-          <span class="icon sun" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.41-1.41-1.8 1.79zM17.66 6.34l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 18a6 6 0 100-12 6 6 0 000 12zm0 4h-0.01H12z"/></svg>
-          </span>
-          <span class="icon moon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
-          </span>
-        </button>
-        <h1 class="name">Katrina Verey</h1>
-        <p class="sub"></p>
-        <!-- Tabs for the three sections (WAI-ARIA tabs pattern) -->
-        <nav class="disciplines-nav" role="tablist" aria-label="Career themes" id="disciplines-nav" tabindex="-1">
-          <button role="tab" id="tab-biomed" data-theme="biomed" class="active" aria-selected="true" aria-controls="detailsInner" tabindex="0">Biomedical Science</button>
-          <button role="tab" id="tab-software" data-theme="software" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Software Development</button>
-          <button role="tab" id="tab-linguistics" data-theme="linguistics" aria-selected="false" aria-controls="detailsInner" tabindex="-1">Linguistic Services</button>
-        </nav>
-      </header>
-
-      <div class="details" id="details">
-        <div class="details-inner" id="detailsInner" role="tabpanel" aria-live="polite" aria-labelledby="tab-biomed"></div>
-      </div>
-
-      <footer class="meta">
-        <span>© <span id="year"></span> Katrina Verey</span>
-        <span>•</span>
-        <a href="https://linkedin.com/in/knverey" target="_blank" rel="noopener">LinkedIn</a>
-        <span>•</span>
-        <a href="https://github.com/KnVerey" target="_blank" rel="noopener">GitHub</a>
-        <span>•</span>
-        <a href="https://instagram.com/microcosmonaut.kat" target="_blank" rel="noopener">Instagram</a>
-      </footer>
-    </section>
-  </main>
-
-  <script>
-    // Theme images
-    const IMAGES = {
-      biomedDark: './images/micro1.jpg',
-      biomedLight: './images/micro1-light.jpg',
-      software: './images/software.png',
-      linguistics: './images/language.png'
-    };
-
-    // Microscopy pools (exclude image 1) for light/dark
-    const GALLERY_DARK = Array.from({length:12}, (_,i)=> i+1).filter(n=>n!==1).map(n=>({src:`./images/micro${n}.jpg`, alt:`Microscopy image ${n}`}));
-    const GALLERY_LIGHT = Array.from({length:12}, (_,i)=> i+1).filter(n=>n!==1).map(n=>({src:`./images/micro${n}-light.jpg`, alt:`Microscopy image ${n} light`}));
-
-    // Centralized captions per file (dark and light variants are independent)
-    // Fill in each string with the desired alt text. Leave empty for a generic fallback.
-    const MICRO_CAPTIONS = {
-      'micro1-light.jpg':'A layer of Elodea plant cells that have been plasmolized with a salt solution. The cell membranes have pulled away from the intact cell walls, and many chloroplasts are visible within each cell.',
-      'micro1.jpg':'Strands of Zygnema filamentous algae against a black background. Cells prominently contain vivid green chloroplasts in the shape of conjoined mushroom clouds.',
-      'micro2-light.jpg':'A layer of plant cells at high magnification. Many granulated green chloroplasts are clearly visible.',
-      'micro2.jpg':'A circular Nassula cell with many colourful vacuoles sits beautifully against a black background.',
-      'micro3-light.jpg':'A large Navicula diatom sits among molecular debris against a dark blue background.',
-      'micro3.jpg':'An unidentified circular, white microorganism with scalloped edges imaged against a dark background.',
-      'micro4-light.jpg':'A strand of Zygnema filamentous algae with chloroplasts like conjoined mushroom clouds sits against a sunset gradient background.',
-      'micro4.jpg':'An ovular diatom at high magnification against a black background.',
-      'micro5-light.jpg':'A blood smear viewed under oblique lighting at high magnification.',
-      'micro5.jpg':'Ferning in amniotic fluid appears as tree-like snowflakes against a dark background.',
-      'micro6-light.jpg':'A large Frontonia cell containing many colourful ingested diatoms.',
-      'micro6.jpg':'A rotifer climbing a strand of filamentous algae against a dark background.',
-      'micro7-light.jpg':'A paramecium glows with many gem-like organelles against a blue background.',
-      'micro7.jpg':'A feeding Bdelloid rotifer looks playful as it appears to hang in from the top-left corner of the image.',
-      'micro8-light.jpg':'A large sigmoid-shaped diatom at high magnification.',
-      'micro8.jpg':'A large, oblong, unidentified unicellular organism that reminded the microscopist of a dolphin.',
-      'micro9-light.jpg':'A human cheek cell arranged with fungi in such a way that one can imagine it being the head of a cartoon person with their arms upraised.',
-      'micro9.jpg':'An unidentified large ciliate swims against a dark background.',
-      'micro10-light.jpg':'Strands of hair-like yellowish fungus glow against a blue background.',
-      'micro10.jpg':'Red blood cells glow against a speckled black background.',
-      'micro11-light.jpg':'A Hypotrichia glows against a blue background, with many large cilia clearly visible, including around its oral aperture.',
-      'micro11.jpg':'Three unidentified tulip-shaped unicellular organisms rotate slowly, with their bases close together.',
-      'micro12-light.jpg':'Feulgen-stained broad bean root tip showing chromosomes in various phases of mitosis.',
-      'micro12.jpg':'A copepod swims against a dark background.'
-    };
-    function captionFor(src){
-      const fn = src.split('/').pop();
-      const val = MICRO_CAPTIONS[fn];
-      return (typeof val === 'string' && val.trim()) ? val : 'Microscopy image';
-    }
-
-    function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
-    function getBgFor(sectionKey){
-      if(sectionKey==='biomed'){
-        return currentTheme()==='light' ? IMAGES.biomedLight : IMAGES.biomedDark;
+    </script>
+    <link rel="icon" type="image/png" href="./images/cumulus-cat-cloud-outlined-black.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        /* theme palettes */
+        --accent-1: #2f5e82;
+        --accent-2: #6ea6c8;
+        --accent-3: #4b7ea8;
+        --bg: #000; /* dark base to avoid flash on background swap */
+        --text: #1a2233;
+        --muted: #6c7680;
+        --radius: 16px;
+        --max-width: 900px;
+        --shadow: 0 10px 40px rgba(30, 40, 60, 0.12);
+        --tile-min: 140; /* px, used by JS */
+        --grid-gap: 10; /* px, used by CSS & JS */
+        --card-bg: rgba(255, 255, 255, 0.92);
+        --card-border: rgba(16, 30, 54, 0.12);
+        --meta-bg: rgba(0, 0, 0, 0.55);
+        --meta-text: #ffffff;
       }
-      if(sectionKey==='software') return IMAGES.software;
-      if(sectionKey==='linguistics') return IMAGES.linguistics;
-      return null;
-    }
 
-    const PLAYLIST_ID = 'PLbQ4eioQT6QPBat3jZPcdUfHmE18bVGFg';
-    const YT_PLAYLIST = "https://www.youtube.com/playlist?list=" + PLAYLIST_ID;
-
-    // Content per theme
-    const CONTENT = {
-      tagline: "Aspiring scientist • Accomplished technologist • Adept communicator",
-      biomed:{
-        title:'Biomedical Science',
-        text:`I am currently pursuing an integrated Honours BSc in Translational and Molecular Medicine and PhD in Cellular and Molecular Medicine at the University of Ottawa. Through this program, I intend to apply my diverse skill set and lifelong passion for science to cancer research that improves patient outcomes. In particular, I am interested in investigating how cellular ecosystems change during the transition from precancerous states to malignancy, and in response to treatment. In my spare time, I am an amateur freshwater microscopist who can spend endless hours mesmerized by the lives of microorganisms.`,
-        cta:{text:'See more of my microscopy on Instagram →',href:'https://instagram.com/microcosmonaut.kat'}
-      },
-      software:{
-        title:'Software Development',
-        text:`Before returning to full-time studies, I spent nearly a decade as a software developer and technical lead, building and operating the large-scale distributed systems that underlie websites relied on by millions of people. My work focused on improving reliability, scalability, and developer experience, often through open-source collaboration. I specialized in Kubernetes and related technologies, and I was known for my exacting attention to detail and incisive analyses.`,
-        cta:{text:'Watch my talks on YouTube →',href:YT_PLAYLIST}
-      },
-      linguistics:{
-        title:'Linguistic Services',
-        text:`My career began in translation and editorial roles for public-sector and humanitarian organizations. Through this work, I honed my ability to convey complex information with clarity and precision, adapting language and style for diverse audiences. In 2023, I revived these skills as the substantive editor for much of Darren McKee's book <i>Uncontrollable: The Threat of Artificial Superintelligence and the Race to Save the World</i>, working closely with the author to strengthen its clarity, structure and readability.`,
-        cta: {text:'Find <i>Uncontrollable</i> on Amazon →', href: 'https://a.co/d/gwpAkX2'}
+      html[data-theme='light'] {
+        --bg: #d9dfe6;
+        --text: #152033;
+        --muted: #516070;
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --card-border: rgba(16, 30, 54, 0.12);
+        --meta-bg: rgba(0, 0, 0, 0.55);
+        --meta-text: #ffffff;
       }
-    };
-
-    // Elements
-    const shell = document.getElementById('shell');
-    const disciplinesNav = document.getElementById('disciplines-nav');
-    const details = document.getElementById('details');
-    const detailsInner = document.getElementById('detailsInner');
-    const bgA = document.getElementById('bgA');
-    const bgB = document.getElementById('bgB');
-    const themeBtn = document.getElementById('themeToggle');
-    const THEME_KEY = 'kats.theme';
-    const TAB_KEY = 'kats.activeTab';
-
-    // When the nav container itself receives focus (e.g., via JS or SR quick nav),
-    // move focus to the currently active tab button so arrow keys work as expected.
-    disciplinesNav.addEventListener('focus', () => {
-      const activeBtn = disciplinesNav.querySelector('button[aria-selected="true"]');
-      if (activeBtn) activeBtn.focus();
-    }, true);
-
-    // Timings (ms)
-    let FADE_DELAY_MS   = 120;  // wait before starting bg crossfade
-    let FADE_FLIP_MS    = 720;  // when to flip the layers after fade
-    let DETAILS_SWAP_MS = 200;  // details fade-out before swapping content
-    let STAGGER_SWAP_MS = 160;  // delay before rendering content after tab click
-    try{
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        FADE_DELAY_MS = 0; FADE_FLIP_MS = 0; DETAILS_SWAP_MS = 0; STAGGER_SWAP_MS = 0;
+      html[data-theme='dark'] {
+        --bg: #0b0f14;
+        --text: #e9eef4;
+        --muted: #a9b4c0;
+        --card-bg: rgba(20, 26, 34, 0.9);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --meta-bg: rgba(255, 255, 255, 0.08);
+        --meta-text: #e9eef4;
       }
-    }catch(_){/* noop */}
 
-    // Background cross-fade controller (encapsulates timers/state)
-    const bgController = (()=>{
-      let bgTop = 'A';
-      let fadeId = 0, fadeStartTO = null, flipTO = null;
-      function announce(url){
-        const el = document.getElementById('bgDesc');
-        if(!el) return;
-        try{
-          const fn = (url||'').split('/').pop();
-          const val = MICRO_CAPTIONS && MICRO_CAPTIONS[fn];
-          el.textContent = (typeof val === 'string' && val.trim()) ? val : '';
-        }catch(_){/* noop */}
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        color: var(--text);
+        background: var(--bg);
       }
-      function set(url, immediate=false){
-        if(!url) return;
-        if(fadeStartTO){ clearTimeout(fadeStartTO); fadeStartTO = null; }
-        if(flipTO){ clearTimeout(flipTO); flipTO = null; }
-        const myId = ++fadeId;
-        const top = (bgTop==='A') ? bgA : bgB;
-        const bottom = (bgTop==='A') ? bgB : bgA;
-        bottom.style.backgroundImage = `url(${url})`;
-        announce(url);
-        if(immediate){
-          top.classList.add('hidden');
-          bottom.classList.remove('hidden');
-          bgTop = (bgTop==='A') ? 'B' : 'A';
-          return;
+
+      /* Fixed background layers that cross-fade */
+      .bg-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        will-change: opacity;
+        opacity: 1;
+        transition: opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .bg-layer.hidden {
+        opacity: 0;
+      }
+
+      /* Floating shell card */
+      .site {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 6vh 18px;
+        position: relative;
+        z-index: 1;
+      }
+      .shell {
+        width: 100%;
+        max-width: var(--max-width);
+        background: var(--card-bg);
+        backdrop-filter: saturate(115%) blur(8px);
+        -webkit-backdrop-filter: saturate(115%) blur(8px);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--card-border);
+        overflow: hidden;
+      }
+      .shell {
+        transition:
+          opacity 0.18s ease,
+          transform 0.18s ease;
+      }
+      .shell.peek-bg {
+        opacity: 0;
+        transform: scale(0.98);
+        pointer-events: none;
+      }
+      .head {
+        padding: 28px 22px 16px 22px;
+        text-align: center;
+        position: relative;
+      }
+      .name {
+        font-family: 'Ephesis', cursive;
+        font-size: clamp(36px, 7.2vw, 64px);
+        font-weight: 400; /* Ephesis has a single weight */
+        letter-spacing: 0.2px;
+        line-height: 1.05;
+        margin: 0 0 6px;
+        color: var(--accent-1);
+      }
+      .sub {
+        font-size: 15px;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .disciplines-nav {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 0 6px;
+      }
+      .disciplines-nav button {
+        background: transparent;
+        border: 2px solid transparent;
+        color: var(--accent-1);
+        padding: 8px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14.5px;
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border 0.18s;
+      }
+      .disciplines-nav button.active {
+        background: var(--accent-1);
+        color: #fff;
+        border-color: var(--accent-2);
+      }
+      .disciplines-nav button:focus-visible {
+        outline: 2px solid var(--accent-1);
+        outline-offset: 2px;
+      }
+      .disciplines-nav button:hover:not(.active) {
+        background: rgba(75, 134, 180, 0.08);
+        color: var(--accent-3);
+      }
+
+      .theme-toggle {
+        position: absolute;
+        right: 14px;
+        top: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        color: var(--text);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+      }
+      html[data-theme='light'] .theme-toggle {
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(16, 30, 54, 0.12);
+      }
+      .theme-toggle .icon {
+        display: none;
+      }
+      html[data-theme='light'] .theme-toggle .sun {
+        display: block;
+      }
+      html[data-theme='dark'] .theme-toggle .moon {
+        display: block;
+      }
+      .theme-toggle:hover {
+        transform: translateY(-1px);
+      }
+
+      /* Expanding details */
+      .details {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          max-height 560ms cubic-bezier(0.2, 0.7, 0.2, 1),
+          opacity 460ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .shell.open .details {
+        opacity: 1;
+        max-height: 1200px;
+      }
+      .details-inner {
+        padding: 0 22px 16px 22px;
+        transition:
+          opacity 380ms cubic-bezier(0.2, 0.7, 0.2, 1),
+          transform 380ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .section-title {
+        font-family: Georgia, serif;
+        font-size: 22px;
+        margin: 0 0 8px;
+        color: var(--accent-3);
+      }
+      .copy {
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0;
+        font-size: 15.5px;
+      }
+      .link {
+        display: inline-block; /* allow natural line wrapping and margin-top to take effect */
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: var(--text);
+        font-weight: 600;
+        text-decoration-line: underline;
+        text-decoration-color: var(--muted);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+        text-decoration-skip-ink: auto;
+        overflow-wrap: anywhere; /* prevent overflow on narrow screens */
+      }
+      .link:hover {
+        color: var(--accent-1);
+        text-decoration-color: var(--accent-1);
+      }
+
+      /* Integrated footer strip */
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 18px;
+        background: var(--meta-bg);
+        color: var(--meta-text);
+        font-size: 13.5px;
+      }
+      .meta a {
+        color: var(--meta-text);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+        padding-bottom: 1px;
+      }
+      .meta a:hover {
+        border-bottom-color: #fff;
+      }
+
+      .media-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: calc(var(--grid-gap) * 1px);
+        margin: 14px 0 8px;
+      }
+      .media-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        aspect-ratio: 1 / 1;
+      }
+      .video-wrap {
+        position: relative;
+        width: 100%;
+        max-width: clamp(420px, 66%, 720px);
+        aspect-ratio: 16 / 9;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: #000;
+        margin: 12px 0 0;
+        min-width: 320px;
+      }
+      .visually-hidden {
+        position: absolute !important;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .video-wrap iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        z-index: 1;
+      }
+      .video-thumb {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        cursor: pointer;
+        z-index: 2;
+      }
+      .video-thumb.hidden {
+        display: none;
+      }
+      .video-thumb::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.35);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+      .video-thumb::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-38%, -50%);
+        width: 0;
+        height: 0;
+        border-left: 26px solid #fff;
+        border-top: 16px solid transparent;
+        border-bottom: 16px solid transparent;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+      }
+
+      @media (max-width: 640px) {
+        .head {
+          padding: 22px 16px 12px;
         }
-        fadeStartTO = setTimeout(()=>{
-          if(myId !== fadeId) return;
-          bottom.classList.remove('hidden');
-          top.classList.add('hidden');
-          flipTO = setTimeout(()=>{ if(myId === fadeId) bgTop = (bgTop==='A') ? 'B' : 'A'; }, FADE_FLIP_MS);
-        }, FADE_DELAY_MS);
+        .details-inner {
+          padding: 0 16px 12px;
+        }
+        .disciplines-nav button {
+          padding: 10px 14px;
+          font-size: 15px;
+        }
+        .disciplines-nav {
+          flex-wrap: wrap;
+          gap: 8px;
+          padding: 12px 8px 6px;
+        }
+        .disciplines-nav button {
+          font-size: 13.5px;
+          padding: 8px 10px;
+        }
       }
-      return { set };
-    })();
 
-    // Safe localStorage helpers
-    function lsGet(key){
-      try { return window.localStorage.getItem(key); } catch(_) { return null; }
-    }
-    function lsSet(key, val){
-      try { window.localStorage.setItem(key, val); } catch(_) { /* noop */ }
-    }
-
-    // Preload only the image we will actually use to avoid console warnings
-    function ensurePreload(url){
-      if(!url) return;
-      const id = 'preload-' + url;
-      if(document.getElementById(id)) return;
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = url;
-      link.id = id;
-      // Prefer high priority since it's the hero background
-      try { link.fetchPriority = 'high'; } catch(_){}
-      document.head.appendChild(link);
-    }
-
-    function applyTheme(t){
-      document.documentElement.setAttribute('data-theme', t);
-      themeBtn && themeBtn.setAttribute('aria-pressed', t==='light' ? 'true' : 'false');
-      lsSet(THEME_KEY, t);
-      // if current active tab is biomed, refresh background to correct variant
-      const key = (disciplinesNav.querySelector('button.active') || {}).dataset?.theme || 'biomed';
-      updateBackgroundFor(key, /*immediate*/ true);
-      // if biomed is displayed, rebuild details to refresh gallery to current theme set
-      if(key==='biomed'){
-        detailsInner.innerHTML = '';
-        detailsInner.appendChild(buildDetails('biomed'));
-        details.style.maxHeight = detailsInner.scrollHeight + 'px';
+      @media (max-width: 480px) {
+        .disciplines-nav {
+          flex-wrap: wrap;
+          gap: 6px;
+          padding: 10px 8px 6px;
+        }
+        .disciplines-nav button {
+          font-size: 13px;
+          padding: 8px 10px;
+        }
       }
-    }
 
-    themeBtn && themeBtn.addEventListener('click', ()=>{
-      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-      applyTheme(cur==='dark' ? 'light' : 'dark');
-    });
-
-    // Build details fragment
-    // Track gallery ResizeObserver for cleanup
-    let galleryRO = null;
-
-    // --- Utility helpers -------------------------------------------------------
-    function shuffle(arr){
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+      @media (prefers-reduced-motion: reduce) {
+        .bg-layer {
+          transition: none;
+        }
+        .shell {
+          transition: none;
+        }
+        .details {
+          transition: none;
+        }
+        .details-inner {
+          transition: none;
+        }
       }
-      return arr;
-    }
-    function pickN(arr, n){
-      return arr.slice(0, Math.max(0, Math.min(n, arr.length)));
-    }
+    </style>
+  </head>
+  <body>
+    <!-- cross-fade background layers -->
+    <div id="bgA" class="bg-layer" aria-hidden="true"></div>
+    <div id="bgB" class="bg-layer hidden" aria-hidden="true"></div>
+    <span id="bgDesc" class="visually-hidden" aria-live="polite"></span>
 
-    // Create a consistent CTA anchor element
-    function renderCTA(cta){
-      if(!cta) return null;
-      const a = document.createElement('a');
-      a.className = 'link';
-      a.href = cta.href; a.target = '_blank'; a.rel = 'noopener';
-      a.innerHTML = cta.text;
-      return a;
-    }
+    <main class="site">
+      <noscript
+        ><p style="max-width: 900px; margin: 1rem auto; text-align: center; color: var(--muted)">
+          This page uses a small amount of JavaScript to display content. Please enable JavaScript
+          to view the details.
+        </p></noscript
+      >
+      <section class="shell open" id="shell">
+        <header class="head">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle theme"
+            aria-pressed="false"
+            title="Toggle theme"
+          >
+            <span class="icon sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path
+                  fill="currentColor"
+                  d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.41-1.41-1.8 1.79zM17.66 6.34l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 18a6 6 0 100-12 6 6 0 000 12zm0 4h-0.01H12z"
+                />
+              </svg>
+            </span>
+            <span class="icon moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+              </svg>
+            </span>
+          </button>
+          <h1 class="name">Katrina Verey</h1>
+          <p class="sub"></p>
+          <!-- Tabs for the three sections (WAI-ARIA tabs pattern) -->
+          <nav
+            class="disciplines-nav"
+            role="tablist"
+            aria-label="Career themes"
+            id="disciplines-nav"
+            tabindex="-1"
+          >
+            <button
+              role="tab"
+              id="tab-biomed"
+              data-theme="biomed"
+              class="active"
+              aria-selected="true"
+              aria-controls="detailsInner"
+              tabindex="0"
+            >
+              Biomedical Science
+            </button>
+            <button
+              role="tab"
+              id="tab-software"
+              data-theme="software"
+              aria-selected="false"
+              aria-controls="detailsInner"
+              tabindex="-1"
+            >
+              Software Development
+            </button>
+            <button
+              role="tab"
+              id="tab-linguistics"
+              data-theme="linguistics"
+              aria-selected="false"
+              aria-controls="detailsInner"
+              tabindex="-1"
+            >
+              Linguistic Services
+            </button>
+          </nav>
+        </header>
 
-    // --- Tiny DOM helpers --------------------------------------------------------
-    function hEl(tag, props={}, ...children){
-      const el = document.createElement(tag);
-      for(const [k,v] of Object.entries(props||{})){
-        if (k === 'className') el.className = v;
-        else if (k === 'dataset') Object.assign(el.dataset, v);
-        else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
-        else if (k in el) el[k] = v; else el.setAttribute(k, v);
+        <div class="details" id="details">
+          <div
+            class="details-inner"
+            id="detailsInner"
+            role="tabpanel"
+            aria-live="polite"
+            aria-labelledby="tab-biomed"
+          ></div>
+        </div>
+
+        <footer class="meta">
+          <span>© <span id="year"></span> Katrina Verey</span>
+          <span>•</span>
+          <a href="https://linkedin.com/in/knverey" target="_blank" rel="noopener">LinkedIn</a>
+          <span>•</span>
+          <a href="https://github.com/KnVerey" target="_blank" rel="noopener">GitHub</a>
+          <span>•</span>
+          <a href="https://instagram.com/microcosmonaut.kat" target="_blank" rel="noopener"
+            >Instagram</a
+          >
+        </footer>
+      </section>
+    </main>
+
+    <script>
+      // Theme images
+      const IMAGES = {
+        biomedDark: './images/micro1.jpg',
+        biomedLight: './images/micro1-light.jpg',
+        software: './images/software.png',
+        linguistics: './images/language.png',
+      };
+
+      // Microscopy pools (exclude image 1) for light/dark
+      const GALLERY_DARK = Array.from({ length: 12 }, (_, i) => i + 1)
+        .filter((n) => n !== 1)
+        .map((n) => ({ src: `./images/micro${n}.jpg`, alt: `Microscopy image ${n}` }));
+      const GALLERY_LIGHT = Array.from({ length: 12 }, (_, i) => i + 1)
+        .filter((n) => n !== 1)
+        .map((n) => ({ src: `./images/micro${n}-light.jpg`, alt: `Microscopy image ${n} light` }));
+
+      // Centralized captions per file (dark and light variants are independent)
+      // Fill in each string with the desired alt text. Leave empty for a generic fallback.
+      const MICRO_CAPTIONS = {
+        'micro1-light.jpg':
+          'A layer of Elodea plant cells that have been plasmolized with a salt solution. The cell membranes have pulled away from the intact cell walls, and many chloroplasts are visible within each cell.',
+        'micro1.jpg':
+          'Strands of Zygnema filamentous algae against a black background. Cells prominently contain vivid green chloroplasts in the shape of conjoined mushroom clouds.',
+        'micro2-light.jpg':
+          'A layer of plant cells at high magnification. Many granulated green chloroplasts are clearly visible.',
+        'micro2.jpg':
+          'A circular Nassula cell with many colourful vacuoles sits beautifully against a black background.',
+        'micro3-light.jpg':
+          'A large Navicula diatom sits among molecular debris against a dark blue background.',
+        'micro3.jpg':
+          'An unidentified circular, white microorganism with scalloped edges imaged against a dark background.',
+        'micro4-light.jpg':
+          'A strand of Zygnema filamentous algae with chloroplasts like conjoined mushroom clouds sits against a sunset gradient background.',
+        'micro4.jpg': 'An ovular diatom at high magnification against a black background.',
+        'micro5-light.jpg': 'A blood smear viewed under oblique lighting at high magnification.',
+        'micro5.jpg':
+          'Ferning in amniotic fluid appears as tree-like snowflakes against a dark background.',
+        'micro6-light.jpg': 'A large Frontonia cell containing many colourful ingested diatoms.',
+        'micro6.jpg': 'A rotifer climbing a strand of filamentous algae against a dark background.',
+        'micro7-light.jpg':
+          'A paramecium glows with many gem-like organelles against a blue background.',
+        'micro7.jpg':
+          'A feeding Bdelloid rotifer looks playful as it appears to hang in from the top-left corner of the image.',
+        'micro8-light.jpg': 'A large sigmoid-shaped diatom at high magnification.',
+        'micro8.jpg':
+          'A large, oblong, unidentified unicellular organism that reminded the microscopist of a dolphin.',
+        'micro9-light.jpg':
+          'A human cheek cell arranged with fungi in such a way that one can imagine it being the head of a cartoon person with their arms upraised.',
+        'micro9.jpg': 'An unidentified large ciliate swims against a dark background.',
+        'micro10-light.jpg':
+          'Strands of hair-like yellowish fungus glow against a blue background.',
+        'micro10.jpg': 'Red blood cells glow against a speckled black background.',
+        'micro11-light.jpg':
+          'A Hypotrichia glows against a blue background, with many large cilia clearly visible, including around its oral aperture.',
+        'micro11.jpg':
+          'Three unidentified tulip-shaped unicellular organisms rotate slowly, with their bases close together.',
+        'micro12-light.jpg':
+          'Feulgen-stained broad bean root tip showing chromosomes in various phases of mitosis.',
+        'micro12.jpg': 'A copepod swims against a dark background.',
+      };
+      function captionFor(src) {
+        const fn = src.split('/').pop();
+        const val = MICRO_CAPTIONS[fn];
+        return typeof val === 'string' && val.trim() ? val : 'Microscopy image';
       }
-      for(const c of children){ if (c==null) continue; el.appendChild(typeof c==='string'? document.createTextNode(c) : c); }
-      return el;
-    }
 
-    function cssNumber(varName, fallback){
-      const v = getComputedStyle(document.documentElement).getPropertyValue(varName);
-      const n = parseFloat(v);
-      return Number.isFinite(n) ? n : fallback;
-    }
+      function currentTheme() {
+        return document.documentElement.getAttribute('data-theme') || 'dark';
+      }
+      function getBgFor(sectionKey) {
+        if (sectionKey === 'biomed') {
+          return currentTheme() === 'light' ? IMAGES.biomedLight : IMAGES.biomedDark;
+        }
+        if (sectionKey === 'software') return IMAGES.software;
+        if (sectionKey === 'linguistics') return IMAGES.linguistics;
+        return null;
+      }
 
-    function buildPlaylistEmbedSrc(playlistId){
-      const base = 'https://www.youtube-nocookie.com/embed/videoseries';
-      const params = new URLSearchParams({
-        list: playlistId,
-        listType: 'playlist',
-        rel: '0', modestbranding: '1', autohide: '1', playsinline: '1', controls: '1',
-        origin: location.origin
-      });
-      return `${base}?${params.toString()}`;
-    }
+      const PLAYLIST_ID = 'PLbQ4eioQT6QPBat3jZPcdUfHmE18bVGFg';
+      const YT_PLAYLIST = 'https://www.youtube.com/playlist?list=' + PLAYLIST_ID;
 
-    // Keep tagline consistent across visible UI, social meta, and JSON‑LD
-    function setGlobalTagline(tagline){
-      // Visible byline
-      const sub = document.querySelector('.sub');
-      if (sub) sub.textContent = tagline;
-      // OpenGraph / Twitter
-      const og = document.querySelector('meta[property="og:description"]');
-      if (og) og.setAttribute('content', tagline);
-      const tw = document.querySelector('meta[name="twitter:description"]');
-      if (tw) tw.setAttribute('content', tagline);
-      // JSON‑LD Person schema
-      const ld = document.querySelector('script[type="application/ld+json"]');
-      if (ld) {
+      // Content per theme
+      const CONTENT = {
+        tagline: 'Aspiring scientist • Accomplished technologist • Adept communicator',
+        biomed: {
+          title: 'Biomedical Science',
+          text: `I am currently pursuing an integrated Honours BSc in Translational and Molecular Medicine and PhD in Cellular and Molecular Medicine at the University of Ottawa. Through this program, I intend to apply my diverse skill set and lifelong passion for science to cancer research that improves patient outcomes. In particular, I am interested in investigating how cellular ecosystems change during the transition from precancerous states to malignancy, and in response to treatment. In my spare time, I am an amateur freshwater microscopist who can spend endless hours mesmerized by the lives of microorganisms.`,
+          cta: {
+            text: 'See more of my microscopy on Instagram →',
+            href: 'https://instagram.com/microcosmonaut.kat',
+          },
+        },
+        software: {
+          title: 'Software Development',
+          text: `Before returning to full-time studies, I spent nearly a decade as a software developer and technical lead, building and operating the large-scale distributed systems that underlie websites relied on by millions of people. My work focused on improving reliability, scalability, and developer experience, often through open-source collaboration. I specialized in Kubernetes and related technologies, and I was known for my exacting attention to detail and incisive analyses.`,
+          cta: { text: 'Watch my talks on YouTube →', href: YT_PLAYLIST },
+        },
+        linguistics: {
+          title: 'Linguistic Services',
+          text: `My career began in translation and editorial roles for public-sector and humanitarian organizations. Through this work, I honed my ability to convey complex information with clarity and precision, adapting language and style for diverse audiences. In 2023, I revived these skills as the substantive editor for much of Darren McKee's book <i>Uncontrollable: The Threat of Artificial Superintelligence and the Race to Save the World</i>, working closely with the author to strengthen its clarity, structure and readability.`,
+          cta: { text: 'Find <i>Uncontrollable</i> on Amazon →', href: 'https://a.co/d/gwpAkX2' },
+        },
+      };
+
+      // Elements
+      const shell = document.getElementById('shell');
+      const disciplinesNav = document.getElementById('disciplines-nav');
+      const details = document.getElementById('details');
+      const detailsInner = document.getElementById('detailsInner');
+      const bgA = document.getElementById('bgA');
+      const bgB = document.getElementById('bgB');
+      const themeBtn = document.getElementById('themeToggle');
+      const THEME_KEY = 'kats.theme';
+      const TAB_KEY = 'kats.activeTab';
+
+      // When the nav container itself receives focus (e.g., via JS or SR quick nav),
+      // move focus to the currently active tab button so arrow keys work as expected.
+      disciplinesNav.addEventListener(
+        'focus',
+        () => {
+          const activeBtn = disciplinesNav.querySelector('button[aria-selected="true"]');
+          if (activeBtn) activeBtn.focus();
+        },
+        true
+      );
+
+      // Timings (ms)
+      let FADE_DELAY_MS = 120; // wait before starting bg crossfade
+      let FADE_FLIP_MS = 720; // when to flip the layers after fade
+      let DETAILS_SWAP_MS = 200; // details fade-out before swapping content
+      let STAGGER_SWAP_MS = 160; // delay before rendering content after tab click
+      try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          FADE_DELAY_MS = 0;
+          FADE_FLIP_MS = 0;
+          DETAILS_SWAP_MS = 0;
+          STAGGER_SWAP_MS = 0;
+        }
+      } catch (_) {
+        /* noop */
+      }
+
+      // Background cross-fade controller (encapsulates timers/state)
+      const bgController = (() => {
+        let bgTop = 'A';
+        let fadeId = 0,
+          fadeStartTO = null,
+          flipTO = null;
+        function announce(url) {
+          const el = document.getElementById('bgDesc');
+          if (!el) return;
+          try {
+            const fn = (url || '').split('/').pop();
+            const val = MICRO_CAPTIONS && MICRO_CAPTIONS[fn];
+            el.textContent = typeof val === 'string' && val.trim() ? val : '';
+          } catch (_) {
+            /* noop */
+          }
+        }
+        function set(url, immediate = false) {
+          if (!url) return;
+          if (fadeStartTO) {
+            clearTimeout(fadeStartTO);
+            fadeStartTO = null;
+          }
+          if (flipTO) {
+            clearTimeout(flipTO);
+            flipTO = null;
+          }
+          const myId = ++fadeId;
+          const top = bgTop === 'A' ? bgA : bgB;
+          const bottom = bgTop === 'A' ? bgB : bgA;
+          bottom.style.backgroundImage = `url(${url})`;
+          announce(url);
+          if (immediate) {
+            top.classList.add('hidden');
+            bottom.classList.remove('hidden');
+            bgTop = bgTop === 'A' ? 'B' : 'A';
+            return;
+          }
+          fadeStartTO = setTimeout(() => {
+            if (myId !== fadeId) return;
+            bottom.classList.remove('hidden');
+            top.classList.add('hidden');
+            flipTO = setTimeout(() => {
+              if (myId === fadeId) bgTop = bgTop === 'A' ? 'B' : 'A';
+            }, FADE_FLIP_MS);
+          }, FADE_DELAY_MS);
+        }
+        return { set };
+      })();
+
+      // Safe localStorage helpers
+      function lsGet(key) {
         try {
-          const data = JSON.parse(ld.textContent || '{}');
-          data.description = tagline;
-          ld.textContent = JSON.stringify(data);
-        } catch (_) { /* noop */ }
+          return window.localStorage.getItem(key);
+        } catch (_) {
+          return null;
+        }
       }
-    }
-
-    function setActiveButton(btn, { focus = true } = {}){
-      const container = btn.parentElement;
-      [...container.querySelectorAll('button')].forEach(b=>{
-        b.classList.remove('active');
-        b.setAttribute('aria-selected','false');
-        b.setAttribute('tabindex','-1');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected','true');
-      btn.setAttribute('tabindex','0');
-      if (focus) btn.focus({preventScroll:true});
-      detailsInner.setAttribute('aria-labelledby', btn.id);
-    }
-
-    function updateBackgroundFor(theme, immediate=false){
-      const bg = getBgFor(theme);
-      ensurePreload(bg);
-      if (bg) bgController.set(bg, immediate);
-    }
-
-    function activateTab(theme, opts={scroll:true, instant:false}){
-      const btn = disciplinesNav.querySelector(`button[data-theme="${theme}"]`);
-      if(!btn) return;
-      setActiveButton(btn, { focus: opts.focus });
-      lsSet(TAB_KEY, theme);
-
-      if (opts.instant) {
-        updateBackgroundFor(theme, /*immediate*/ true);
-        renderActive(theme, true);
-      } else {
-        updateBackgroundFor(theme);
-        setTimeout(()=>{ renderActive(theme); }, STAGGER_SWAP_MS);
+      function lsSet(key, val) {
+        try {
+          window.localStorage.setItem(key, val);
+        } catch (_) {
+          /* noop */
+        }
       }
 
-      if (opts.scroll) shell.scrollIntoView({behavior:'smooth', block:'center'});
-    }
-
-    // --- Section renderers -----------------------------------------------------
-    function renderBiomedSection(){
-      const data = CONTENT.biomed;
-      const frag = document.createDocumentFragment();
-      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
-      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
-
-      const grid = hEl('div',{className:'media-grid', 'aria-label':'Microscopy gallery'});
-      const pool = shuffle((currentTheme()==='light' ? GALLERY_LIGHT : GALLERY_DARK).slice());
-      const maxPool = pickN(pool, 8);
-      maxPool.forEach(item=>{
-        const img = hEl('img', { loading:'lazy', decoding:'async', src:item.src, alt:captionFor(item.src) });
-        grid.appendChild(img);
-      });
-
-      if (galleryRO) { try { galleryRO.disconnect(); } catch(_){} }
-      galleryRO = new ResizeObserver(entries=>{
-        const w = entries[0].contentRect.width;
-        const MIN = cssNumber('--tile-min', 140);
-        const GAP = cssNumber('--grid-gap', 10);
-        let cols = 2;
-        if (w >= 4*MIN + 3*GAP) cols = 4; else if (w >= 3*MIN + 2*GAP) cols = 3; else cols = 2;
-        const total = cols * 2;
-        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        Array.from(grid.children).forEach((el, i)=> el.style.display = (i < total) ? '' : 'none');
-        requestAnimationFrame(()=>{ details.style.maxHeight = detailsInner.scrollHeight + 'px'; });
-      });
-      galleryRO.observe(grid);
-      frag.appendChild(grid);
-
-      const ctaEl = renderCTA(data.cta);
-      if (ctaEl) frag.appendChild(ctaEl);
-      return frag;
-    }
-
-    function renderSoftwareSection(){
-      const data = CONTENT.software;
-      const frag = document.createDocumentFragment();
-      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
-      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
-
-      const wrap = hEl('div',{className:'video-wrap'});
-      const thumb = hEl('div',{className:'video-thumb', role:'button', 'aria-label':'Play talks playlist', tabIndex:0, 'aria-pressed':'false'});
-      const iframe = hEl('iframe',{
-        title:'Talks by Katrina Verey',
-        loading:'lazy',
-        allow:'encrypted-media; picture-in-picture', // no autoplay; user must click overlay
-        id:'software-video-iframe',
-        allowFullscreen:true
-      });
-      thumb.setAttribute('aria-controls', iframe.id);
-      thumb.setAttribute('aria-describedby', 'soft-desc');
-      const YT_PLAYLIST_EMBED = buildPlaylistEmbedSrc(PLAYLIST_ID);
-
-      thumb.style.backgroundImage = "url('./images/software-playlist-thumb.png')";
-
-      function activate(){ if(!iframe.src) iframe.src = YT_PLAYLIST_EMBED; thumb.classList.add('hidden'); thumb.setAttribute('aria-pressed','true'); thumb.setAttribute('aria-hidden','true'); setTimeout(()=>{ iframe.focus && iframe.focus(); }, 50); }
-      thumb.addEventListener('click', activate);
-      thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); } });
-
-      wrap.appendChild(hEl('span',{id:'soft-desc', className:'visually-hidden', textContent:'Press to load and play a YouTube playlist of talks'}));
-      wrap.appendChild(thumb);
-      wrap.appendChild(iframe);
-      frag.appendChild(wrap);
-
-      const ctaEl = renderCTA(data.cta);
-      if (ctaEl) frag.appendChild(ctaEl);
-      return frag;
-    }
-
-    function renderLinguisticsSection(){
-      const data = CONTENT.linguistics;
-      const frag = document.createDocumentFragment();
-      frag.appendChild(hEl('h2',{className:'section-title', textContent: data.title}));
-      frag.appendChild(hEl('p',{className:'copy', innerHTML: data.text}));
-      const ctaEl = renderCTA(data.cta);
-      if (ctaEl) frag.appendChild(ctaEl);
-      return frag;
-    }
-
-    function buildDetails(key){
-      if(key==='biomed') return renderBiomedSection();
-      if(key==='software') return renderSoftwareSection();
-      return renderLinguisticsSection();
-    }
-
-    // Animate details swap
-    function renderActive(key, instant=false){
-      if(instant){
-        detailsInner.innerHTML = '';
-        detailsInner.appendChild(buildDetails(key));
-        details.style.maxHeight = detailsInner.scrollHeight + 'px';
-        detailsInner.style.opacity = 1;
-        detailsInner.style.transform = 'translateY(0)';
-        return;
+      // Preload only the image we will actually use to avoid console warnings
+      function ensurePreload(url) {
+        if (!url) return;
+        const id = 'preload-' + url;
+        if (document.getElementById(id)) return;
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = url;
+        link.id = id;
+        // Prefer high priority since it's the hero background
+        try {
+          link.fetchPriority = 'high';
+        } catch (_) {}
+        document.head.appendChild(link);
       }
-      detailsInner.style.opacity = 0;
-      detailsInner.style.transform = 'translateY(6px)';
-      setTimeout(()=>{
-        detailsInner.innerHTML = '';
-        detailsInner.appendChild(buildDetails(key));
-        details.style.maxHeight = detailsInner.scrollHeight + 'px';
-        requestAnimationFrame(()=>{
+
+      function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        themeBtn && themeBtn.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
+        lsSet(THEME_KEY, t);
+        // if current active tab is biomed, refresh background to correct variant
+        const key =
+          (disciplinesNav.querySelector('button.active') || {}).dataset?.theme || 'biomed';
+        updateBackgroundFor(key, /*immediate*/ true);
+        // if biomed is displayed, rebuild details to refresh gallery to current theme set
+        if (key === 'biomed') {
+          detailsInner.innerHTML = '';
+          detailsInner.appendChild(buildDetails('biomed'));
+          details.style.maxHeight = detailsInner.scrollHeight + 'px';
+        }
+      }
+
+      themeBtn &&
+        themeBtn.addEventListener('click', () => {
+          const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+          applyTheme(cur === 'dark' ? 'light' : 'dark');
+        });
+
+      // Build details fragment
+      // Track gallery ResizeObserver for cleanup
+      let galleryRO = null;
+
+      // --- Utility helpers -------------------------------------------------------
+      function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+      function pickN(arr, n) {
+        return arr.slice(0, Math.max(0, Math.min(n, arr.length)));
+      }
+
+      // Create a consistent CTA anchor element
+      function renderCTA(cta) {
+        if (!cta) return null;
+        const a = document.createElement('a');
+        a.className = 'link';
+        a.href = cta.href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.innerHTML = cta.text;
+        return a;
+      }
+
+      // --- Tiny DOM helpers --------------------------------------------------------
+      function hEl(tag, props = {}, ...children) {
+        const el = document.createElement(tag);
+        for (const [k, v] of Object.entries(props || {})) {
+          if (k === 'className') el.className = v;
+          else if (k === 'dataset') Object.assign(el.dataset, v);
+          else if (k.startsWith('on') && typeof v === 'function')
+            el.addEventListener(k.slice(2).toLowerCase(), v);
+          else if (k in el) el[k] = v;
+          else el.setAttribute(k, v);
+        }
+        for (const c of children) {
+          if (c == null) continue;
+          el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+        }
+        return el;
+      }
+
+      function cssNumber(varName, fallback) {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(varName);
+        const n = parseFloat(v);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function buildPlaylistEmbedSrc(playlistId) {
+        const base = 'https://www.youtube-nocookie.com/embed/videoseries';
+        const params = new URLSearchParams({
+          list: playlistId,
+          listType: 'playlist',
+          rel: '0',
+          modestbranding: '1',
+          autohide: '1',
+          playsinline: '1',
+          controls: '1',
+          origin: location.origin,
+        });
+        return `${base}?${params.toString()}`;
+      }
+
+      // Keep tagline consistent across visible UI, social meta, and JSON‑LD
+      function setGlobalTagline(tagline) {
+        // Visible byline
+        const sub = document.querySelector('.sub');
+        if (sub) sub.textContent = tagline;
+        // OpenGraph / Twitter
+        const og = document.querySelector('meta[property="og:description"]');
+        if (og) og.setAttribute('content', tagline);
+        const tw = document.querySelector('meta[name="twitter:description"]');
+        if (tw) tw.setAttribute('content', tagline);
+        // JSON‑LD Person schema
+        const ld = document.querySelector('script[type="application/ld+json"]');
+        if (ld) {
+          try {
+            const data = JSON.parse(ld.textContent || '{}');
+            data.description = tagline;
+            ld.textContent = JSON.stringify(data);
+          } catch (_) {
+            /* noop */
+          }
+        }
+      }
+
+      function setActiveButton(btn, { focus = true } = {}) {
+        const container = btn.parentElement;
+        [...container.querySelectorAll('button')].forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('tabindex', '-1');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('tabindex', '0');
+        if (focus) btn.focus({ preventScroll: true });
+        detailsInner.setAttribute('aria-labelledby', btn.id);
+      }
+
+      function updateBackgroundFor(theme, immediate = false) {
+        const bg = getBgFor(theme);
+        ensurePreload(bg);
+        if (bg) bgController.set(bg, immediate);
+      }
+
+      function activateTab(theme, opts = { scroll: true, instant: false }) {
+        const btn = disciplinesNav.querySelector(`button[data-theme="${theme}"]`);
+        if (!btn) return;
+        setActiveButton(btn, { focus: opts.focus });
+        lsSet(TAB_KEY, theme);
+
+        if (opts.instant) {
+          updateBackgroundFor(theme, /*immediate*/ true);
+          renderActive(theme, true);
+        } else {
+          updateBackgroundFor(theme);
+          setTimeout(() => {
+            renderActive(theme);
+          }, STAGGER_SWAP_MS);
+        }
+
+        if (opts.scroll) shell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      // --- Section renderers -----------------------------------------------------
+      function renderBiomedSection() {
+        const data = CONTENT.biomed;
+        const frag = document.createDocumentFragment();
+        frag.appendChild(hEl('h2', { className: 'section-title', textContent: data.title }));
+        frag.appendChild(hEl('p', { className: 'copy', innerHTML: data.text }));
+
+        const grid = hEl('div', { className: 'media-grid', 'aria-label': 'Microscopy gallery' });
+        const pool = shuffle((currentTheme() === 'light' ? GALLERY_LIGHT : GALLERY_DARK).slice());
+        const maxPool = pickN(pool, 8);
+        maxPool.forEach((item) => {
+          const img = hEl('img', {
+            loading: 'lazy',
+            decoding: 'async',
+            src: item.src,
+            alt: captionFor(item.src),
+          });
+          grid.appendChild(img);
+        });
+
+        if (galleryRO) {
+          try {
+            galleryRO.disconnect();
+          } catch (_) {}
+        }
+        galleryRO = new ResizeObserver((entries) => {
+          const w = entries[0].contentRect.width;
+          const MIN = cssNumber('--tile-min', 140);
+          const GAP = cssNumber('--grid-gap', 10);
+          let cols = 2;
+          if (w >= 4 * MIN + 3 * GAP) cols = 4;
+          else if (w >= 3 * MIN + 2 * GAP) cols = 3;
+          else cols = 2;
+          const total = cols * 2;
+          grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+          Array.from(grid.children).forEach(
+            (el, i) => (el.style.display = i < total ? '' : 'none')
+          );
+          requestAnimationFrame(() => {
+            details.style.maxHeight = detailsInner.scrollHeight + 'px';
+          });
+        });
+        galleryRO.observe(grid);
+        frag.appendChild(grid);
+
+        const ctaEl = renderCTA(data.cta);
+        if (ctaEl) frag.appendChild(ctaEl);
+        return frag;
+      }
+
+      function renderSoftwareSection() {
+        const data = CONTENT.software;
+        const frag = document.createDocumentFragment();
+        frag.appendChild(hEl('h2', { className: 'section-title', textContent: data.title }));
+        frag.appendChild(hEl('p', { className: 'copy', innerHTML: data.text }));
+
+        const wrap = hEl('div', { className: 'video-wrap' });
+        const thumb = hEl('div', {
+          className: 'video-thumb',
+          role: 'button',
+          'aria-label': 'Play talks playlist',
+          tabIndex: 0,
+          'aria-pressed': 'false',
+        });
+        const iframe = hEl('iframe', {
+          title: 'Talks by Katrina Verey',
+          loading: 'lazy',
+          allow: 'encrypted-media; picture-in-picture', // no autoplay; user must click overlay
+          id: 'software-video-iframe',
+          allowFullscreen: true,
+        });
+        thumb.setAttribute('aria-controls', iframe.id);
+        thumb.setAttribute('aria-describedby', 'soft-desc');
+        const YT_PLAYLIST_EMBED = buildPlaylistEmbedSrc(PLAYLIST_ID);
+
+        thumb.style.backgroundImage = "url('./images/software-playlist-thumb.png')";
+
+        function activate() {
+          if (!iframe.src) iframe.src = YT_PLAYLIST_EMBED;
+          thumb.classList.add('hidden');
+          thumb.setAttribute('aria-pressed', 'true');
+          thumb.setAttribute('aria-hidden', 'true');
+          setTimeout(() => {
+            iframe.focus && iframe.focus();
+          }, 50);
+        }
+        thumb.addEventListener('click', activate);
+        thumb.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            activate();
+          }
+        });
+
+        wrap.appendChild(
+          hEl('span', {
+            id: 'soft-desc',
+            className: 'visually-hidden',
+            textContent: 'Press to load and play a YouTube playlist of talks',
+          })
+        );
+        wrap.appendChild(thumb);
+        wrap.appendChild(iframe);
+        frag.appendChild(wrap);
+
+        const ctaEl = renderCTA(data.cta);
+        if (ctaEl) frag.appendChild(ctaEl);
+        return frag;
+      }
+
+      function renderLinguisticsSection() {
+        const data = CONTENT.linguistics;
+        const frag = document.createDocumentFragment();
+        frag.appendChild(hEl('h2', { className: 'section-title', textContent: data.title }));
+        frag.appendChild(hEl('p', { className: 'copy', innerHTML: data.text }));
+        const ctaEl = renderCTA(data.cta);
+        if (ctaEl) frag.appendChild(ctaEl);
+        return frag;
+      }
+
+      function buildDetails(key) {
+        if (key === 'biomed') return renderBiomedSection();
+        if (key === 'software') return renderSoftwareSection();
+        return renderLinguisticsSection();
+      }
+
+      // Animate details swap
+      function renderActive(key, instant = false) {
+        if (instant) {
+          detailsInner.innerHTML = '';
+          detailsInner.appendChild(buildDetails(key));
+          details.style.maxHeight = detailsInner.scrollHeight + 'px';
           detailsInner.style.opacity = 1;
           detailsInner.style.transform = 'translateY(0)';
-        });
-      }, DETAILS_SWAP_MS);
-    }
-
-    // Click/tap handling
-    disciplinesNav.addEventListener('click', (ev)=>{
-      const btn = ev.target.closest('button');
-      if(!btn) return;
-      activateTab(btn.dataset.theme);
-    });
-
-    disciplinesNav.addEventListener('keydown', (e)=>{
-      const buttons = Array.from(disciplinesNav.querySelectorAll('button'));
-      const idx = buttons.findIndex(b=> b.classList.contains('active'));
-      const focusTo = (i)=>{
-        buttons.forEach((b, j)=> b.setAttribute('tabindex', j===i ? '0' : '-1'));
-        buttons[i].focus();
-        buttons[i].click();
-      };
-      if(['ArrowRight','ArrowDown'].includes(e.key)){ e.preventDefault(); focusTo((idx+1)%buttons.length); }
-      if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); focusTo((idx-1+buttons.length)%buttons.length); }
-      if(e.key==='Home'){ e.preventDefault(); focusTo(0); }
-      if(e.key==='End'){ e.preventDefault(); focusTo(buttons.length-1); }
-    });
-
-    // Init: restore theme and last tab
-    (function init(){
-      const savedTheme = lsGet(THEME_KEY);
-      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', initialTheme);
-      themeBtn && themeBtn.setAttribute('aria-pressed', initialTheme==='light' ? 'true' : 'false');
-
-      const savedTab = lsGet(TAB_KEY) || 'biomed';
-      activateTab(savedTab, { scroll:false, instant:true, focus:false });
-
-      document.getElementById('year').textContent = new Date().getFullYear();
-      setGlobalTagline(CONTENT.tagline);
-    })();
-
-    // Press and hold to peek background
-    (function pressAndHoldPeek(){
-      const card = document.getElementById('shell');
-      if(!card) return;
-
-      let pressTimer = null;
-      let active = false;
-
-      function isOnBackground(e){
-        const r = card.getBoundingClientRect();
-        const {clientX:x, clientY:y} = e;
-        return (x < r.left || x > r.right || y < r.top || y > r.bottom);
+          return;
+        }
+        detailsInner.style.opacity = 0;
+        detailsInner.style.transform = 'translateY(6px)';
+        setTimeout(() => {
+          detailsInner.innerHTML = '';
+          detailsInner.appendChild(buildDetails(key));
+          details.style.maxHeight = detailsInner.scrollHeight + 'px';
+          requestAnimationFrame(() => {
+            detailsInner.style.opacity = 1;
+            detailsInner.style.transform = 'translateY(0)';
+          });
+        }, DETAILS_SWAP_MS);
       }
 
-      function onPointerMove(e){
-        if(!active) return;
-        card.classList.toggle('peek-bg', isOnBackground(e));
-      }
-      function endHold(){
-        if(pressTimer){ clearTimeout(pressTimer); pressTimer = null; }
-        active = false;
-        card.classList.remove('peek-bg');
-        window.removeEventListener('pointermove', onPointerMove);
-        window.removeEventListener('pointerup', endHold);
-        window.removeEventListener('pointercancel', endHold);
-        window.removeEventListener('blur', endHold);
-      }
-      function onPointerDown(e){
-        const primaryMouse = (e.pointerType === 'mouse' && e.button === 0);
-        const touch = (e.pointerType === 'touch');
-        if(!(primaryMouse || touch)) return;
-        if(!isOnBackground(e)) return;
-        if(pressTimer || active) return; // guard against re-entry
+      // Click/tap handling
+      disciplinesNav.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('button');
+        if (!btn) return;
+        activateTab(btn.dataset.theme);
+      });
 
-        pressTimer = setTimeout(()=>{
-          active = true;
-          card.classList.add('peek-bg');
-          window.addEventListener('pointermove', onPointerMove, {passive:true});
-        }, 300);
-        window.addEventListener('pointerup', endHold, {once:true});
-        window.addEventListener('pointercancel', endHold, {once:true});
-        window.addEventListener('blur', endHold, {once:true});
-      }
-      document.addEventListener('pointerdown', onPointerDown, {passive:true});
-    })();
-  </script>
-</body>
+      disciplinesNav.addEventListener('keydown', (e) => {
+        const buttons = Array.from(disciplinesNav.querySelectorAll('button'));
+        const idx = buttons.findIndex((b) => b.classList.contains('active'));
+        const focusTo = (i) => {
+          buttons.forEach((b, j) => b.setAttribute('tabindex', j === i ? '0' : '-1'));
+          buttons[i].focus();
+          buttons[i].click();
+        };
+        if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+          e.preventDefault();
+          focusTo((idx + 1) % buttons.length);
+        }
+        if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+          e.preventDefault();
+          focusTo((idx - 1 + buttons.length) % buttons.length);
+        }
+        if (e.key === 'Home') {
+          e.preventDefault();
+          focusTo(0);
+        }
+        if (e.key === 'End') {
+          e.preventDefault();
+          focusTo(buttons.length - 1);
+        }
+      });
+
+      // Init: restore theme and last tab
+      (function init() {
+        const savedTheme = lsGet(THEME_KEY);
+        const prefersLight =
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const initialTheme = savedTheme || (prefersLight ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        themeBtn &&
+          themeBtn.setAttribute('aria-pressed', initialTheme === 'light' ? 'true' : 'false');
+
+        const savedTab = lsGet(TAB_KEY) || 'biomed';
+        activateTab(savedTab, { scroll: false, instant: true, focus: false });
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        setGlobalTagline(CONTENT.tagline);
+      })();
+
+      // Press and hold to peek background
+      (function pressAndHoldPeek() {
+        const card = document.getElementById('shell');
+        if (!card) return;
+
+        let pressTimer = null;
+        let active = false;
+
+        function isOnBackground(e) {
+          const r = card.getBoundingClientRect();
+          const { clientX: x, clientY: y } = e;
+          return x < r.left || x > r.right || y < r.top || y > r.bottom;
+        }
+
+        function onPointerMove(e) {
+          if (!active) return;
+          card.classList.toggle('peek-bg', isOnBackground(e));
+        }
+        function endHold() {
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+          active = false;
+          card.classList.remove('peek-bg');
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerup', endHold);
+          window.removeEventListener('pointercancel', endHold);
+          window.removeEventListener('blur', endHold);
+        }
+        function onPointerDown(e) {
+          const primaryMouse = e.pointerType === 'mouse' && e.button === 0;
+          const touch = e.pointerType === 'touch';
+          if (!(primaryMouse || touch)) return;
+          if (!isOnBackground(e)) return;
+          if (pressTimer || active) return; // guard against re-entry
+
+          pressTimer = setTimeout(() => {
+            active = true;
+            card.classList.add('peek-bg');
+            window.addEventListener('pointermove', onPointerMove, { passive: true });
+          }, 300);
+          window.addEventListener('pointerup', endHold, { once: true });
+          window.addEventListener('pointercancel', endHold, { once: true });
+          window.addEventListener('blur', endHold, { once: true });
+        }
+        document.addEventListener('pointerdown', onPointerDown, { passive: true });
+      })();
+    </script>
+  </body>
 </html>

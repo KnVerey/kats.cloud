@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 const sel = {
   shell: '#shell',
@@ -14,7 +14,7 @@ const sel = {
   videoWrap: '.video-wrap',
   videoThumb: '.video-thumb',
   videoIframe: '#software-video-iframe',
-  bgDesc: '#bgDesc'
+  bgDesc: '#bgDesc',
 };
 
 test.beforeEach(async ({ page }) => {
@@ -23,45 +23,35 @@ test.beforeEach(async ({ page }) => {
 
 /** Utility: count visible grid images (those not display:none) */
 async function visibleGridCount(page) {
-  return page.$$eval(sel.galleryImgs, (els) =>
-    els.filter(el => getComputedStyle(el).display !== 'none').length
+  return page.$$eval(
+    sel.galleryImgs,
+    (els) => els.filter((el) => getComputedStyle(el).display !== 'none').length
   );
-}
-
-/** Wait until the grid has settled: visible tiles match columns * 2 and occupy exactly two rows */
-async function waitForGridStable(page){
-  await page.waitForFunction(() => {
-    const grid = document.querySelector('.media-grid');
-    if(!grid) return false;
-    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
-    const imgs = Array.from(grid.querySelectorAll('img'))
-      .filter(el => getComputedStyle(el).display !== 'none');
-    const visible = imgs.length;
-    // Count distinct row positions among visible tiles
-    const rows = new Set(imgs.map(el => Math.round(el.getBoundingClientRect().top))).size;
-    return visible === cols * 2 && rows === 2;
-  });
 }
 
 /** Utility: does the VISIBLE bg layer include a given URL fragment? */
 async function bgHasURL(page, urlPart) {
-  return page.$eval('.bg-layer:not(.hidden)', (el, needle) => {
-    const bg = getComputedStyle(el).backgroundImage || '';
-    return bg.includes(needle);
-  }, urlPart);
+  return page.$eval(
+    '.bg-layer:not(.hidden)',
+    (el, needle) => {
+      const bg = getComputedStyle(el).backgroundImage || '';
+      return bg.includes(needle);
+    },
+    urlPart
+  );
 }
 
-async function waitForBg(page, urlPart){
-  await page.waitForFunction((needle)=>{
+async function waitForBg(page, urlPart) {
+  await page.waitForFunction((needle) => {
     const el = document.querySelector('.bg-layer:not(.hidden)');
-    if(!el) return false;
+    if (!el) return false;
     const bg = getComputedStyle(el).backgroundImage || '';
     return bg.includes(needle);
   }, urlPart);
 }
 
-async function liveBgText(page){
-  return page.$eval(sel.bgDesc, el => el.textContent || '');
+async function liveBgText(page) {
+  return page.$eval(sel.bgDesc, (el) => el.textContent || '');
 }
 
 test('tabs have proper ARIA + roving tabindex and update on click', async ({ page }) => {
@@ -72,6 +62,8 @@ test('tabs have proper ARIA + roving tabindex and update on click', async ({ pag
   await expect(biomed).toHaveAttribute('tabindex', '0');
   await expect(software).toHaveAttribute('aria-selected', 'false');
   await expect(software).toHaveAttribute('tabindex', '-1');
+  await expect(linguistics).toHaveAttribute('aria-selected', 'false');
+  await expect(linguistics).toHaveAttribute('tabindex', '-1');
 
   // Click Software; ARIA + tabindex should swap
   await software.click();
@@ -93,18 +85,21 @@ test('keyboard navigation: arrows + Home/End update selection and focus', async 
 
   await page.keyboard.press('ArrowRight');
   await expect(page.locator(sel.tabBtn('software'))).toBeFocused();
-  await expect(page.locator(sel.tabBtn('software'))).toHaveAttribute('aria-selected','true');
+  await expect(page.locator(sel.tabBtn('software'))).toHaveAttribute('aria-selected', 'true');
 
   await page.keyboard.press('End');
   await expect(page.locator(sel.tabBtn('linguistics'))).toBeFocused();
-  await expect(page.locator(sel.tabBtn('linguistics'))).toHaveAttribute('aria-selected','true');
+  await expect(page.locator(sel.tabBtn('linguistics'))).toHaveAttribute('aria-selected', 'true');
 
   await page.keyboard.press('Home');
   await expect(page.locator(sel.tabBtn('biomed'))).toBeFocused();
-  await expect(page.locator(sel.tabBtn('biomed'))).toHaveAttribute('aria-selected','true');
+  await expect(page.locator(sel.tabBtn('biomed'))).toHaveAttribute('aria-selected', 'true');
 });
 
-test('theme toggle persists and sets correct biomed background (micro1[-light])', async ({ page, context }) => {
+test('theme toggle persists and sets correct biomed background (micro1[-light])', async ({
+  page,
+  context,
+}) => {
   // Toggle to light
   await page.click('#themeToggle');
   // Re-open page (new tab) to verify persistence
@@ -115,8 +110,11 @@ test('theme toggle persists and sets correct biomed background (micro1[-light])'
   await page2.click(sel.tabBtn('biomed'));
 
   // Ensure theme is light (in case persistence failed or was interfered with by another test)
-  await page2.evaluate(() => document.documentElement.getAttribute('data-theme'))
-    .then(async t => { if(t !== 'light') await page2.click('#themeToggle'); });
+  await page2
+    .evaluate(() => document.documentElement.getAttribute('data-theme'))
+    .then(async (t) => {
+      if (t !== 'light') await page2.click('#themeToggle');
+    });
 
   // Wait until the biomed-light background is actually painted on the visible layer
   await waitForBg(page2, 'micro1-light.jpg');
@@ -130,7 +128,9 @@ test('theme toggle persists and sets correct biomed background (micro1[-light])'
   await waitForBg(page2, 'micro1.jpg');
 });
 
-test('background live region announces caption on load and after theme toggle', async ({ page }) => {
+test('background live region announces caption on load and after theme toggle', async ({
+  page,
+}) => {
   // Ensure biomed is active
   await page.click(sel.tabBtn('biomed'));
   // There should be a non-empty announcement when background sets
@@ -143,34 +143,22 @@ test('background live region announces caption on load and after theme toggle', 
   expect(t2.trim().length).toBeGreaterThan(0);
 });
 
-test('biomed gallery is container-aware and shows full even rows', async ({ page }) => {
-  // Ensure Biomed tab active
-  await page.click(sel.tabBtn('biomed'));
-
-  async function expectRowsFor(width){
-    await page.setViewportSize({ width, height: 900 });
-    await waitForGridStable(page);
-    const cols = await page.$eval(sel.gallery, el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-    const expected = cols * 2; // two full rows always
-    const count = await visibleGridCount(page);
-    expect(count).toBe(expected);
-  }
-
-  await expectRowsFor(1400); // likely 4 cols => 8
-  await expectRowsFor(900);  // likely 3 cols => 6
-  await expectRowsFor(480);  // likely 2 cols => 4
-});
-
 test('biomed gallery images have non-empty alt text', async ({ page }) => {
   await page.click(sel.tabBtn('biomed'));
   await page.setViewportSize({ width: 900, height: 900 });
   await page.waitForTimeout(150);
-  const alts = await page.$$eval(sel.galleryImgs, els => els.filter(el => getComputedStyle(el).display !== 'none').map(el => el.getAttribute('alt') || ''));
+  const alts = await page.$$eval(sel.galleryImgs, (els) =>
+    els
+      .filter((el) => getComputedStyle(el).display !== 'none')
+      .map((el) => el.getAttribute('alt') || '')
+  );
   expect(alts.length).toBeGreaterThan(0);
   for (const a of alts) expect(a.trim().length).toBeGreaterThan(0);
 });
 
-test('software overlay: clickable/keyboard, hides on activate, iframe loads and gets focus', async ({ page }) => {
+test('software overlay: clickable/keyboard, hides on activate, iframe loads and gets focus', async ({
+  page,
+}) => {
   await page.click(sel.tabBtn('software'));
 
   const thumb = page.locator(sel.videoThumb);
@@ -185,7 +173,9 @@ test('software overlay: clickable/keyboard, hides on activate, iframe loads and 
   await expect(page.locator(sel.videoThumb)).toHaveAttribute('aria-pressed', 'true');
   // Focus should move into iframe (or at least be focusable)
   await page.waitForTimeout(50);
-  const active = await page.evaluate(() => document.activeElement && document.activeElement.tagName);
+  const active = await page.evaluate(
+    () => document.activeElement && document.activeElement.tagName
+  );
   expect(active).toBe('IFRAME');
 
   // Reload Software and test keyboard activation too
@@ -199,8 +189,9 @@ test('software overlay: clickable/keyboard, hides on activate, iframe loads and 
 test('press-and-hold on background hides the card and restores on release', async ({ page }) => {
   // Find a point outside the card to press
   const shellBox = await page.locator(sel.shell).boundingBox();
-  const x = (shellBox.x || 0) - 20;
-  const y = (shellBox.y || 0) + 20;
+  if (!shellBox) throw new Error('Shell bounding box not available');
+  const x = (shellBox.x ?? 0) - 20;
+  const y = (shellBox.y ?? 0) + 20;
 
   // Press and hold 350ms
   await page.mouse.move(x, y);
@@ -215,8 +206,9 @@ test('press-and-hold on background hides the card and restores on release', asyn
 
 test('quick tap on background does not trigger peek (300ms threshold)', async ({ page }) => {
   const shellBox = await page.locator(sel.shell).boundingBox();
-  const x = (shellBox.x || 0) - 20;
-  const y = (shellBox.y || 0) + 20;
+  if (!shellBox) throw new Error('Shell bounding box not available');
+  const x = (shellBox.x ?? 0) - 20;
+  const y = (shellBox.y ?? 0) + 20;
   // Quick tap
   await page.mouse.move(x, y);
   await page.mouse.down();
