@@ -1188,6 +1188,11 @@
         const card = document.getElementById('shell');
         if (!card) return;
 
+        // Desktop-only: require a precise pointer that supports hover
+        const desktopLike =
+          window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (!desktopLike) return;
+
         let pressTimer = null;
         let active = false;
 
@@ -1214,9 +1219,8 @@
           window.removeEventListener('blur', endHold);
         }
         function onPointerDown(e) {
-          const primaryMouse = e.pointerType === 'mouse' && e.button === 0;
-          const touch = e.pointerType === 'touch';
-          if (!(primaryMouse || touch)) return;
+          // Only primary mouse button on desktop
+          if (!(e.pointerType === 'mouse' && e.button === 0)) return;
           if (!isOnBackground(e)) return;
           if (pressTimer || active) return; // guard against re-entry
 
